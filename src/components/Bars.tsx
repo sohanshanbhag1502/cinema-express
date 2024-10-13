@@ -4,7 +4,7 @@ export function NavBar(){
     return (
         <nav className="w-full flex content-center items-center justify-between 
         shadow-sm shadow-white">
-            <img src="/logo.png" className="p-4 w-[10%]" />
+            <Link href="/" className="p-4 w-[10%]"><img src="/logo.png" className="w-full"/></Link>
             <input className="text-xl rounded-full border-white border-2 bg-black p-2
             w-[40%] focus:border-2" id="searchfield"
             placeholder="Search for movies here..." />
@@ -41,7 +41,7 @@ export function NavBar(){
 export function FootBar(){
     return (
         <div className="w-full flex content-center items-center justify-evenly 
-        p-5 border-white border-t-2">
+        p-5 border-white border-t-2 text-center">
             <p>&copy; Copyright {Date().substring(11,15)} Cinema Express. All Rights Reserved</p>
         </div>
     )

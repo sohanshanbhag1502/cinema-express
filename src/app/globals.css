@@ -61,3 +61,16 @@ body {
 ::-webkit-scrollbar-thumb:active {
     @apply bg-slate-800 cursor-pointer
 }
+
+nav, button{
+    @apply invisible
+}
+
+@media screen {
+    nav, button{
+        @apply visible
+    }
+    #Verfication{
+        @apply invisible
+    }
+}

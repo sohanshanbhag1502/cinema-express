@@ -1,23 +1,4 @@
-import { Card } from "@/components/Cards";
-
-interface CategoryProps{
-    title: string;
-    categories: Array<string>;
-}
-
-function Categories(props: CategoryProps){
-    return (
-        <div className="w-full flex flex-col content-center justify-start items-start 
-        my-4 text-left pl-4">
-            <h3 className="text-3xl font-extrabold">Search By {props.title}</h3>
-            <div className="w-full grid grid-flow-col justify-evenly gap-9 my-4 
-            overflow-x-auto p-5">
-                {props.categories.map((ele)=><Card title={ele} image={ele} 
-                category={props.title}/>)}
-            </div>
-        </div>
-    )
-}
+import { Categories } from "@/components/Categories"
 
 export default function Display() {
     return (

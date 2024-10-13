@@ -1,6 +1,6 @@
 import Carousel from "@/components/Carousel"
 import Display from "@/components/Display"
-import Releases from "@/components/Releases"
+import {Releases} from "@/components/Categories"
 
 export default function Home() {
     const images = [

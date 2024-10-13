@@ -6,7 +6,7 @@ import { NavBar, FootBar } from "@/components/Bars";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    icons:"/favicon.png",
+    icons:"/logo.png",
     title: "Cinema Express",
     description: "Your Ticket to Seamless Cinema Experiences - Manage, Book, Enjoy!",
 };
