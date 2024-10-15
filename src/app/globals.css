@@ -73,4 +73,7 @@ nav, button{
     #Verfication{
         @apply invisible
     }
+    #ticketlogo{
+        @apply invisible
+    }
 }

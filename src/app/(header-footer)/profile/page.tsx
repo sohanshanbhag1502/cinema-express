@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import type { ChangeEventHandler } from "react";
+import type { FormEvent } from "react";
 import Link from "next/link";
 
 export default function ProfilePage(){
@@ -15,40 +15,40 @@ export default function ProfilePage(){
     const [password, setPassword] = useState("")
     const [repassword, setRePassword] = useState("")
 
-    const handleNameChange = (e: ChangeEventHandler) => {
-        setName(e.target.value)
+    const handleNameChange = (e: FormEvent<HTMLInputElement>) => {
+        setName(e.currentTarget.value)
     }
 
-    const handlePhoneNoChange = (e: ChangeEventHandler) => {
-        setPhoneNo(e.target.value)
+    const handlePhoneNoChange = (e: FormEvent<HTMLInputElement>) => {
+        setPhoneNo(e.currentTarget.value)
     }
 
-    const handleAgeChange = (e: ChangeEventHandler) => {
-        setAge(e.target.value)
+    const handleAgeChange = (e: FormEvent<HTMLInputElement>) => {
+        setAge(e.currentTarget.value)
     }
 
-    const handleEmailChange = (e: ChangeEventHandler) => {
-        setEmail(e.target.value)
+    const handleEmailChange = (e: FormEvent<HTMLInputElement>) => {
+        setEmail(e.currentTarget.value)
     }
 
-    const handleDobChange = (e: ChangeEventHandler) => {
-        setDob(e.target.value)
+    const handleDobChange = (e: FormEvent<HTMLInputElement>) => {
+        setDob(e.currentTarget.value)
     }
 
-    const handleGenderChange = (e: ChangeEventHandler) => {
-        setGender(e.target.value)
+    const handleGenderChange = (e: FormEvent<HTMLInputElement>) => {
+        setGender(e.currentTarget.value)
     }
 
-    const handleUserNameChange = (e: ChangeEventHandler) => {
-        setUserName(e.target.value)
+    const handleUserNameChange = (e: FormEvent<HTMLInputElement>) => {
+        setUserName(e.currentTarget.value)
     }
 
-    const handlePasswordChange = (e: ChangeEventHandler) => {
-        setPassword(e.target.value)
+    const handlePasswordChange = (e: FormEvent<HTMLInputElement>) => {
+        setPassword(e.currentTarget.value)
     }
 
-    const handleRePasswordChange = (e: ChangeEventHandler) => {
-        setRePassword(e.target.value)
+    const handleRePasswordChange = (e: FormEvent<HTMLInputElement>) => {
+        setRePassword(e.currentTarget.value)
     }
     
     return (

@@ -78,7 +78,7 @@ function VerifyCodepage() {
             </p>
             <button
                 type="submit"
-                className="p-2 my-4 bg-blue-800 hover:bg-blue-700 
+                className="p-2 my-4 bg-blue-800 hover:bg-blue-600 
                 text-white text-center rounded-3xl text-xl w-[40%]"
             >
                 Proceed

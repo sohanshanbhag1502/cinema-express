@@ -12,7 +12,7 @@ export default function ContactUs(){
             </p>
             <p className="w-full text-lg p-5 font-medium">
                 <br/>
-                <span className="text-xl font-semibold">General Inquiries</span> 
+                <span className="text-2xl font-semibold">General Inquiries</span> 
                 <br/>For any general questions or comments regarding our site, content, or 
                 services, drop us an email or give us a call, and we'll get back to you 
                 as soon as possible.
@@ -21,22 +21,7 @@ export default function ContactUs(){
 
                 <br/>
                 <br/>
-                <span className="text-xl font-semibold">Advertising</span>
-                <br/>Interested in advertising with us? Contact our marketing team to 
-                discuss opportunities and partnerships.
-                <br/>Email: ads@cinemaexpress.com
-                <br/>Phone: +1 (555) 987-6543
-
-                <br/>
-                <br/>
-                <span className="text-xl font-semibold">Media & Press</span>
-                <br/>For press inquiries or to request interviews, access press releases, or 
-                for media-related questions, get in touch with our media relations team.
-                <br/>Email: press@cinemaexpress.com
-
-                <br/>
-                <br/>
-                <span className="text-xl font-semibold">Support</span><br/>
+                <span className="text-2xl font-semibold">Support</span><br/>
                 Experiencing technical issues with the website or have questions 
                 regarding your account? Reach out to our support team for assistance.
                 <br/>Email: support@cinemaexpress.com
@@ -44,7 +29,7 @@ export default function ContactUs(){
 
                 <br/>
                 <br/>
-                <span className="text-xl font-semibold">Social Media</span>
+                <span className="text-2xl font-semibold">Social Media</span>
                 <br/>Stay connected with us on social media for the latest movie reviews, 
                 news, and updates:
                 <br/>Facebook: Cinema Express
@@ -53,7 +38,7 @@ export default function ContactUs(){
 
                 <br/>
                 <br/>
-                <span className="text-xl font-semibold">Visit Us</span>
+                <span className="text-2xl font-semibold">Visit Us</span>
                 <br/>Cinema Express Headquarters
                 <br/>123 Movie Lane, Suite 100
                 <br/>Film City, CA 90001, USA

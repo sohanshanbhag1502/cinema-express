@@ -40,6 +40,16 @@ interface ShowTimeProps{
     date:string;
 }
 
+interface BookingProps{
+    bookingId: string;
+    movieTitle: string;
+    movieYear: string;
+    date: string;
+    showTime: string;
+    theater: string;
+    city: string;
+}
+
 export function Card(props: CardProps){
     const router = useRouter();
 
@@ -126,6 +136,31 @@ export function ShowTimeCard(props: ShowTimeProps){
                 }
             }}>
             {props.time}
+        </Link>
+    )
+}
+
+export function BookingCard(props: BookingProps){
+    return (
+        <Link className="w-full flex flex-col items-start content-center border-2 
+        border-white p-4 my-4 cursor-pointer transition-all duration-200 
+        hover:scale-105 hover:shadow-md hover:shadow-teal-400"
+        href={{
+            pathname:"/booking-confirmation",
+            query:{
+                bookingId:"1000"
+            }
+        }}>
+            <p className="text-2xl">Booking Id: {props.bookingId}</p>
+            <div className="w-full flex items-center content-center py-2">
+                <img src={'/'+props.movieTitle+'.webp'} 
+                className="w-[5%]"/>
+                <div className="w-full flex flex-col items-start content-center px-5">
+                    <p className="text-lg">{props.movieTitle} - {props.movieYear}</p>
+                    <p className="text-lg">{props.date} @ {props.showTime}</p>
+                    <p className="text-lg">{props.theater}, {props.city}</p>
+                </div>
+            </div>
         </Link>
     )
 }

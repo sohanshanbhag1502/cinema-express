@@ -241,8 +241,8 @@ function SignupPage() {
             </div>
             <button
                 type="submit"
-                className="mt-4 w-[40%] bg-blue-500 font-semibold text-white 
-                p-2 rounded-full hover:bg-blue-600 text-xl"
+                className="mt-4 w-[40%] font-semibold text-white 
+                p-2 rounded-full bg-blue-800 hover:bg-blue-600 text-xl"
             >
                 Sign Up
             </button>

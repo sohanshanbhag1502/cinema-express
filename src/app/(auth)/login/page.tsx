@@ -77,8 +77,8 @@ function Loginpage() {
                 onChange={handlePasswordChange}
                 required
             />
-            <button className="mt-7 w-[50%] bg-blue-500 font-semibold text-xl
-                text-white p-2 rounded-full hover:bg-blue-600 transition">
+            <button className="mt-7 w-[50%] font-semibold text-xl transition
+                text-white p-2 rounded-full bg-blue-800 hover:bg-blue-600">
                 Login
             </button>
             <div className="flex text-center content-center items-center justify-center 

@@ -1,7 +1,6 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 export default function BookingConfirmationPage(){
     const params=useSearchParams();
@@ -17,9 +16,13 @@ export default function BookingConfirmationPage(){
 
     return (
         <div className="w-full p-10 flex flex-col items-center content-center">
+            <img src="/logo.png" className="w-[20%] absolute top-0" 
+            id="ticketlogo"/>
             <h1 className="text-3xl font-bold">Booking Confirmation</h1>
             <div className="flex flex-col items-center content-center mt-10">
                 <h1 className="text-3xl font-semibold">Your Ticket</h1>
+                
+                <p className="text-xl font-medium">Movie Name: {movieTitle}</p>
                 <p className="text-xl font-medium">Theater: {theater}</p>
                 <p className="text-xl font-medium">Date: {date}</p>
                 <p className="text-xl font-medium">Show Time: {time}</p>
