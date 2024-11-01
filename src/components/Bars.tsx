@@ -38,6 +38,23 @@ export function NavBar(){
     )
 }
 
+export function AdminNavBar(){
+    return (
+        <nav className="w-full flex content-center items-center justify-between 
+        shadow-sm shadow-white">
+            <Link href="/" className="p-4 w-[10%]">
+                <img src="/logo.png" className="w-full"/>
+            </Link>
+            <p className="text-3xl">Admin Dashboard</p>
+            <button className="text-xl font-semibold cursor-pointer
+            rounded-full bg-white text-black py-1 px-5 mx-5 hover:bg-black 
+            hover:text-white transition-all duration-150 border-white border-2">
+                Logout
+            </button>
+        </nav>
+    )
+}
+
 export function FootBar(){
     return (
         <div className="w-full flex content-center items-center justify-evenly 

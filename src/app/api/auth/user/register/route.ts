@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import UserSchema from "@/db/models/user";
+import UserSchema from "@/lib/models/user";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 
@@ -23,9 +23,9 @@ export async function POST(req: NextRequest){
 
     validation.data.passwd = await bcrypt.hash(validation.data.passwd, 10);
     validation.data.dob = new Date(validation.data.dob);
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
         data: validation.data
     });
 
-    return NextResponse.json(newUser, {status: 201});
+    return NextResponse.json("User registered successfully", {status: 201});
 }

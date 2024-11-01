@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import prisma from "@/prisma/client";
-import CastSchema from "@/db/models/cast";
+import CastSchema from "@/lib/models/cast";
 
 export async function POST(req: NextRequest){
     const body = await req.json();

@@ -2,7 +2,7 @@
 import Link from "next/link"
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
-import type { ChangeEvent } from "react"
+import type { FormEvent } from "react"
 
 function SignupPage() {
     const [name, setName] = useState("")
@@ -16,43 +16,43 @@ function SignupPage() {
     const [repassword, setRePassword] = useState("")
     const router = useRouter()
 
-    const handleNameChange = (e: ChangeEvent) => {
-        setName(e.target.value)
+    const handleNameChange = (e: FormEvent<HTMLInputElement>) => {
+        setName(e.currentTarget.value)
     }
 
-    const handlePhoneNoChange = (e: ChangeEvent) => {
-        setPhoneNo(e.target.value)
+    const handlePhoneNoChange = (e: FormEvent<HTMLInputElement>) => {
+        setPhoneNo(e.currentTarget.value)
     }
 
-    const handleAgeChange = (e: ChangeEvent) => {
-        setAge(e.target.value)
+    const handleAgeChange = (e: FormEvent<HTMLInputElement>) => {
+        setAge(e.currentTarget.value)
     }
 
-    const handleEmailChange = (e: ChangeEvent) => {
-        setEmail(e.target.value)
+    const handleEmailChange = (e: FormEvent<HTMLInputElement>) => {
+        setEmail(e.currentTarget.value)
     }
 
-    const handleDobChange = (e: ChangeEvent) => {
-        setDob(e.target.value)
+    const handleDobChange = (e: FormEvent<HTMLInputElement>) => {
+        setDob(e.currentTarget.value)
     }
 
-    const handleGenderChange = (e: ChangeEvent) => {
-        setGender(e.target.value)
+    const handleGenderChange = (e: FormEvent<HTMLInputElement>) => {
+        setGender(e.currentTarget.value)
     }
 
-    const handleUserNameChange = (e: ChangeEvent) => {
-        setUserName(e.target.value)
+    const handleUserNameChange = (e: FormEvent<HTMLInputElement>) => {
+        setUserName(e.currentTarget.value)
     }
 
-    const handlePasswordChange = (e: ChangeEvent) => {
-        setPassword(e.target.value)
+    const handlePasswordChange = (e: FormEvent<HTMLInputElement>) => {
+        setPassword(e.currentTarget.value)
     }
 
-    const handleRePasswordChange = (e: ChangeEvent) => {
-        setRePassword(e.target.value)
+    const handleRePasswordChange = (e: FormEvent<HTMLInputElement>) => {
+        setRePassword(e.currentTarget.value)
     }
 
-    const postSignUp = async (e: ChangeEvent) => {
+    const postSignUp = async (e: FormEvent<HTMLInputElement>) => {
         e.preventDefault()
         if (password!==repassword){
             alert("The password and re-enter password must match.")

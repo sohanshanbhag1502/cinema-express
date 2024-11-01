@@ -52,7 +52,7 @@ function Loginpage() {
     return (
         <>
             <h1 className="text-2xl md:text-4xl mb-8 font-semibold text-white">
-                Login
+                Login As Admin
             </h1>
             <input
                 type="text"
@@ -83,13 +83,8 @@ function Loginpage() {
             </button>
             <div className="flex text-center content-center items-center justify-center 
             w-full pt-8">
-                <p className="font-medium text-lg">Don&apos;t have an account?&nbsp;</p>
-                <Link
-                    href="/register"
-                    className="text-blue-300 hover:underline font-medium text-lg
-                    cursor-pointer">
-                    Register
-                </Link>
+                <p className="font-medium text-lg">To become an Administrator contact our 
+                support team</p>
             </div>
         </>
     )
