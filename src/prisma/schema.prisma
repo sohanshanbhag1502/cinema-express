@@ -1,0 +1,257 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId    String    @id @map("user_id") @db.VarChar(255)
+  name      String    @db.VarChar(255)
+  email     String    @db.VarChar(255)
+  phNum     String    @db.Char(10)
+  dob       DateTime  @db.Date
+  passwd    String    @db.VarChar(255)
+  gender    Gender
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Theater {
+  theId      String       @id @map("the_id") @db.Char(5)
+  name       String       @db.VarChar(255)
+  city       City
+  address    String       @db.VarChar(255)
+  screens    Screen[]
+  BookedSeat BookedSeat[]
+  HostMovie  HostMovie[]
+  Booking    Booking[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model Movie {
+  movieId     String        @id @map("movie_id") @db.Char(5)
+  title       String        @db.VarChar(255)
+  description String        @db.Text
+  duration    String        @db.VarChar(10)
+  ageRating   AgeRating
+  pubYear     Int           @db.Year
+  rating      Float         @db.Float
+  ratingCount Int           @db.Int
+  movieCasts  MovieCast[]
+  genres      MovieGenre[]
+  languages   MovieLang[]
+  hostMovies  HostMovie[]
+  BookedSeat  BookedSeat[]
+  bookings    Booking[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  MovieScreen MovieScreen[]
+}
+
+model Screen {
+  screenId    String        @id @map("screen_id") @db.Char(5)
+  theId       String        @map("the_id") @db.Char(5)
+  resolution  Resolution
+  theater     Theater       @relation(fields: [theId], references: [theId])
+  bookedSeats BookedSeat[]
+  bookings    Booking[]
+  HostMovie   HostMovie[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  MovieScreen MovieScreen[]
+}
+
+model BookedSeat {
+  seatRow        String   @db.Char(1)
+  seatCol        String   @db.Char(2)
+  theId          String   @map("the_id") @db.Char(5)
+  movieId        String   @map("movie_id") @db.Char(5)
+  bookedTime     DateTime @db.DateTime
+  theater        Theater  @relation(fields: [theId], references: [theId])
+  movie          Movie    @relation(fields: [movieId], references: [movieId])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  Screen         Screen?  @relation(fields: [screenScreenId], references: [screenId])
+  screenScreenId String?  @db.Char(5)
+
+  @@id([seatRow, seatCol, theId, movieId, bookedTime])
+}
+
+model Payment {
+  pId       String        @id @map("p_id") @db.Char(5)
+  amount    Int
+  method    PaymentMethod
+  tranId    Int
+  bookId    String        @map("book_id")
+  booking   Booking       @relation(fields: [bookId], references: [bookId])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model HostMovie {
+  theId     String   @map("the_id") @db.Char(5)
+  screenId  String   @map("screen_id") @db.Char(5)
+  movieId   String   @map("movie_id") @db.Char(5)
+  showtime  String   @db.Char(8)
+  movie     Movie    @relation(fields: [movieId], references: [movieId])
+  screen    Screen   @relation(fields: [screenId], references: [screenId])
+  theater   Theater  @relation(fields: [theId], references: [theId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([theId, screenId, movieId, showtime])
+}
+
+model Booking {
+  bookId    String    @id @map("book_id") @db.Char(5)
+  movieId   String    @map("movie_id") @db.Char(5)
+  screenId  String    @map("screen_id") @db.Char(5)
+  theId     String    @map("the_id") @db.Char(5)
+  userId    String    @map("user_id") @db.VarChar(255)
+  showtime  String    @db.Char(8)
+  bookdate  DateTime  @db.Date
+  seats     String    @db.VarChar(255)
+  movie     Movie     @relation(fields: [movieId], references: [movieId])
+  screen    Screen    @relation(fields: [screenId], references: [screenId])
+  theater   Theater   @relation(fields: [theId], references: [theId])
+  user      User      @relation(fields: [userId], references: [userId])
+  Payment   Payment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Cast {
+  castId     String      @id @map("cast_id") @db.Char(5)
+  name       String      @db.VarChar(255)
+  role       CastRole
+  movieCasts MovieCast[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model MovieCast {
+  movieId   String   @map("movie_id") @db.Char(5)
+  castId    String   @map("cast_id") @db.Char(5)
+  movie     Movie    @relation(fields: [movieId], references: [movieId])
+  cast      Cast     @relation(fields: [castId], references: [castId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([movieId, castId])
+}
+
+model MovieGenre {
+  movieId   String   @map("movie_id") @db.Char(5)
+  genreName Genre
+  movie     Movie    @relation(fields: [movieId], references: [movieId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([movieId, genreName])
+}
+
+model MovieLang {
+  movieId   String   @map("movie_id") @db.Char(5)
+  lang      Language
+  movie     Movie    @relation(fields: [movieId], references: [movieId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([movieId, lang])
+}
+
+model MovieScreen {
+  movieId    String     @map("movie_id") @db.Char(5)
+  screenId   String     @map("screen_id") @db.Char(5)
+  theId      String     @map("the_id") @db.Char(5)
+  movie      Movie      @relation(fields: [movieId], references: [movieId])
+  screen     Screen     @relation(fields: [screenId], references: [screenId])
+  resolution Resolution
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@id([movieId, screenId])
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum AgeRating {
+  Uplus  @map("U+")
+  UAplus @map("UA+")
+  Aplus  @map("A+")
+  S
+}
+
+enum Resolution {
+  FourD  @map("4D")
+  ThreeD @map("3D")
+  TwoD   @map("2D")
+}
+
+enum PaymentMethod {
+  CARD
+  UPI
+}
+
+enum CastRole {
+  Director
+  Actor
+  Producer
+  MusicDirector
+  Editor
+}
+
+enum City {
+  Bengaluru
+  Chennai
+  Chandigarh
+  Delhi
+  Hyderabad
+  Pune
+  Mumbai
+  Kochi
+  Trivandrum
+}
+
+enum Genre {
+  Comedy
+  Drama
+  Action
+  Thriller
+  Horror
+  Romance
+  SciFi
+  Fantasy
+  Adventure
+  Mystery
+  Crime
+  Documentary
+  History
+  Animation
+  Fiction
+  Biography
+}
+
+enum Language {
+  English
+  Hindi
+  Telugu
+  Kannada
+  Tamil
+  Malayalam
+  Marathi
+}

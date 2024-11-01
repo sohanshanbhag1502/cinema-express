@@ -21,7 +21,6 @@ export default function BookingConfirmationPage(){
             <h1 className="text-3xl font-bold">Booking Confirmation</h1>
             <div className="flex flex-col items-center content-center mt-10">
                 <h1 className="text-3xl font-semibold">Your Ticket</h1>
-                
                 <p className="text-xl font-medium">Movie Name: {movieTitle}</p>
                 <p className="text-xl font-medium">Theater: {theater}</p>
                 <p className="text-xl font-medium">Date: {date}</p>
@@ -36,12 +35,7 @@ export default function BookingConfirmationPage(){
                 font-semibold text-xl rounded-full transition-all duration-200 mx-2
                 hover:bg-black hover:text-white'
             onClick={()=>{
-                // const originalHTML = document.body.innerHTML;
-                // window.print();
-                // document.querySelectorAll('nav')
-                //     .forEach(nav => nav.remove())
                 window.print();
-                // document.body.innerHTML = originalHTML;
             }}
             >
                 Print Ticket
