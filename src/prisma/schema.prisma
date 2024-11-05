@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -54,9 +54,9 @@ model Movie {
   description String       @db.Text
   duration    String       @db.VarChar(10)
   ageRating   AgeRating
-  pubYear     Int          @db.Year
-  rating      Float        @db.Float
-  ratingCount Int          @db.Int
+  pubYear     DateTime     @db.Time
+  rating      Float        @db.Real
+  ratingCount Int          @db.Integer
   movieCasts  MovieCast[]
   genres      MovieGenre[]
   languages   MovieLang[]
@@ -86,7 +86,7 @@ model BookedSeat {
   movieId    String   @map("movie_id") @db.Char(5)
   bookId     String   @map("book_id") @db.Char(5)
   screenId   String   @db.Char(5)
-  bookedTime DateTime @db.DateTime
+  bookedTime DateTime @db.Timestamp
   theater    Theater  @relation(fields: [theId], references: [theId])
   movie      Movie    @relation(fields: [movieId], references: [movieId])
   booking    Booking  @relation(fields: [bookId], references: [bookId])
@@ -112,7 +112,7 @@ model HostMovie {
   screenId  String   @map("screen_id") @db.Char(5)
   movieId   String   @map("movie_id") @db.Char(5)
   showtime  String   @db.Char(8)
-  cost      Int      @db.Int
+  cost      Int      @db.Integer
   movie     Movie    @relation(fields: [movieId], references: [movieId])
   screen    Screen   @relation(fields: [screenId], references: [screenId])
   theater   Theater  @relation(fields: [theId], references: [theId])
