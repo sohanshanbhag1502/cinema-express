@@ -26,5 +26,5 @@ export async function POST(req: NextRequest){
         data: validation.data
     });
 
-    return NextResponse.json("Admin Registered Successfully", {status: 201});
+    return NextResponse.json({message:"Admin Registered Successfully"}, {status: 201});
 }

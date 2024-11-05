@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 
 export default function AddTheaterPage(){
     const [theId, setTheId] = useState("")
@@ -9,26 +9,48 @@ export default function AddTheaterPage(){
     const [city, setCity] = useState("")
     const [address, setAddress] = useState("")
 
-    const handleTheChange = (e: FormEvent<HTMLInputElement>) => {
-        setTheId(e.currentTarget.value)
+    const handleTheChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTheId(e.target.value)
     }
 
-    const handleNameChange = (e: FormEvent<HTMLInputElement>) => {
-        setName(e.currentTarget.value)
+    const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value)
     }
 
-    const handleCityChange = (e: FormEvent<HTMLInputElement>) => {
-        setCity(e.currentTarget.value)
+    const handleCityChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setCity(e.target.value)
     }
 
-    const handleAddressChange = (e: FormEvent<HTMLInputElement>) => {
-        setAddress(e.currentTarget.value)
+    const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setAddress(e.target.value)
+    }
+
+    const postTheater = async (e: FormEvent<HTMLButtonElement>)=>{
+        e.preventDefault();
+        const res=await fetch('/api/admin/add-items/theater', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                theId,
+                name,
+                city,
+                address
+            })
+        });
+        if (res.status===200){
+            alert("Added the theater successfully");
+        }
+        else{
+            alert("Something went wrong");
+        }
     }
 
     return (
         <div className="w-full flex flex-col items-center content-center justify-center 
         p-10">
-            <h1 className="font-bold text-4xl">Add Movie</h1>
+            <h1 className="font-bold text-4xl">Add Theater</h1>
             <div className="w-[50%] flex py-5 items-center content-center">
                 <div className="w-[30%] flex flex-col items-start content-center">
                     <label className="text-2xl py-[0.8rem]">Theater ID :</label>
@@ -39,8 +61,6 @@ export default function AddTheaterPage(){
                 <div className="w-[70%] flex flex-col items-start content-center">
                     <input
                         type="text"
-                        id="name"
-                        name="name"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={theId}
@@ -49,8 +69,6 @@ export default function AddTheaterPage(){
                     />
                     <input
                         type="text"
-                        id="username"
-                        name="username"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={name}
@@ -58,9 +76,7 @@ export default function AddTheaterPage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={city}
@@ -68,9 +84,7 @@ export default function AddTheaterPage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={address}
@@ -82,8 +96,9 @@ export default function AddTheaterPage(){
             <div className="w-full flex items-center content-center justify-evenly">
                 <button className='p-2 bg-white text-black border-white 
                 border-2 font-semibold text-xl rounded-full transition-all duration-200 
-                mx-2 hover:bg-black hover:text-white'>
-                    Add Movie
+                mx-2 hover:bg-black hover:text-white'
+                onClick={postTheater}>
+                    Add Theater
                 </button>
             </div>
         </div>

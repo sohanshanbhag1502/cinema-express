@@ -1,47 +1,44 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verify } from '@/lib/JWT';
-import type { JWTPayload } from 'jose';
+import { tokenPayload, verify } from '@/lib/JWT';
 
 export async function middleware(req: NextRequest) {
-    if (req.url.includes('/api')) {
-        if (req.url.includes('/auth')){
-            return NextResponse.next();
-        }
-        else{
-            const cookie= req.cookies.get('auth-token');
-            var token: JWTPayload | string;
-            try{
-                token=await verify(cookie?.value!, process.env.JWT_SECRET!);
-            }
-            catch (error){
-                return NextResponse.redirect(new URL('/login', req.url));
-            }
-            if (token){
-                return NextResponse.next();
-            }
-            else{
-                return NextResponse.redirect(new URL('/login', req.url));
-            }
-        }
+    if (req.url.includes('/api') && req.method!=='POST') {
+        return NextResponse.redirect(new URL('/not-found', req.url));
     }
-    else if (req.url.includes('/admin') && !req.url.includes('/admin/login')){
-        const cookie= req.cookies.get('auth-token');
-        var token: JWTPayload | string;
+    if ((req.cookies.get('auth-token') || 
+    req.url.includes('/user/') || req.url.includes('/admin')) && 
+    !req.url.includes('/api/auth/')) {
+        const cookie = req.cookies.get('auth-token');
+        if (!cookie) {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+
         try{
-            token=await verify(cookie?.value!, process.env.JWT_SECRET!);
+            var token: tokenPayload = await verify(cookie.value, process.env.JWT_SECRET!);
         }
-        catch (error){
-            return NextResponse.redirect(new URL('/admin/login', req.url));
+        catch{
+            return NextResponse.redirect(new URL('/login', req.url));
         }
-        if (token && token.role==="admin"){
-            return NextResponse.next();
+
+        if (!token) {
+            return NextResponse.redirect(new URL('/login', req.url));
         }
-        else{
-            return NextResponse.redirect(new URL('/unauthorized', req.url));
-        }
+
+        if (token.role==='user' && (req.url.endsWith('/login') || 
+        req.url.endsWith('/register')) && !req.url.includes('/api/'))
+            return NextResponse.redirect(new URL('/user/profile', req.url));
+        else if (token.role==='admin' && req.url.endsWith('/admin/login') || 
+        req.url.endsWith('/admin/register') && !req.url.includes('/api/'))
+            return NextResponse.redirect(new URL('/admin', req.url));
+
+        if (token.role==='user' && req.url.includes('/admin') && 
+        !req.url.includes('/api'))
+            return NextResponse.redirect(new URL('/user/profile', req.url));
+        else if (token.role==='admin' && req.url.includes('/user') && 
+        !req.url.includes('/api')) 
+            return NextResponse.redirect(new URL('/admin', req.url));
     }
-    else{
-        return NextResponse.next();
-    }
+
+    return NextResponse.next();
 }

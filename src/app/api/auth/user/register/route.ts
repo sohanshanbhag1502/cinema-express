@@ -27,5 +27,5 @@ export async function POST(req: NextRequest){
         data: validation.data
     });
 
-    return NextResponse.json("User registered successfully", {status: 201});
+    return NextResponse.json({message: "User registered successfully"}, {status: 200});
 }

@@ -1,4 +1,5 @@
-import { Card, MovieCard, ShowTimeCard, StarCard } from "@/components/Cards";
+import { Card, ShowTimeCard, StarCard } from "@/components/Cards";
+import { Cast } from "@prisma/client";
 
 interface CategoryProps{
     title: string;
@@ -6,15 +7,16 @@ interface CategoryProps{
 }
 
 interface CastProps{
-    stars: Array<string>;
+    stars: Array<Cast> | undefined;
 }
 
 interface TheaterProps{
+    theaterId:string;
     name:string;
     showtimes:Array<string>;
-    movieId: string | null;
-    movieTitle: string | null;
+    movieId: string;
     date:string;
+    address:string;
 }
 
 export function Categories(props: CategoryProps){
@@ -31,36 +33,13 @@ export function Categories(props: CategoryProps){
     )
 }
 
-export function Releases(){
-    const releases = [
-        "Devara",
-        "Deadpool & Wolverine",
-        "Kalki",
-        "Furiosa",
-        "Raayan",
-        "Despicable Me 4"
-    ]
-    return (
-        <div className="w-full flex flex-col content-center justify-start items-start 
-        my-4 text-left pl-4">
-            <h3 className="text-3xl font-extrabold">New Releases</h3>
-            <div className="w-full grid grid-flow-col justify-evenly gap-9 
-            overflow-x-auto p-5">
-                {releases.map((ele, index)=><MovieCard id={index} genre={"Thriller"}
-                age="UA" language="Multiple" format="2D, 3D, 4D" year={2024}
-                title={ele} poster={ele} />)}
-            </div>
-        </div>
-    )
-}
-
-export function Cast(props: CastProps){
+export function CastComp(props: CastProps){
     return (
         <div className="w-full flex items-start content-center
             overflow-x-auto p-5">
-            {props.stars.map((ele)=>
-                <StarCard name={ele} designation="Actor" 
-                biolink="https://en.wikipedia.org/wiki/N._T._Rama_Rao_Jr"/>)
+            {props.stars?.map((ele)=>
+                ele.role==="Actor"?<StarCard name={ele.name} designation="Actor" 
+                biolink={ele.biolink} id={ele.castId}/>:<></>)
             }
         </div>
     )
@@ -70,9 +49,9 @@ export function Crew(props: CastProps){
     return (
         <div className="w-full flex items-start content-center
             overflow-x-auto p-5">
-            {props.stars.map((ele)=>
-                <StarCard name={ele} designation="Director" 
-                biolink="https://en.wikipedia.org/wiki/N._T._Rama_Rao_Jr"/>)
+            {props.stars?.map((ele)=>
+                ele.role!=="Actor"?<StarCard name={ele.name} designation={ele.role} 
+                biolink={ele.biolink} id={ele.castId}/>:<></>)
             }
         </div>
     )
@@ -81,11 +60,11 @@ export function Crew(props: CastProps){
 export function TheaterDisplay(props:TheaterProps){
     return (
         <div className="w-full flex-col items-start content-center mt-5">
-            <h1 className="text-lg font-semibold">{props.name}</h1>
+            <h1 className="text-lg font-semibold">{props.name}, {props.address}</h1>
             <div className="w-full flex flex-wrap">
                 {props.showtimes.map((ele)=><ShowTimeCard time={ele}
-                movieId={props.movieId} movieTitle={props.movieTitle} 
-                theater={props.name} date={props.date}/>)}
+                movieId={props.movieId} theaterId={props.theaterId} 
+                date={props.date}/>)}
             </div>
         </div>
     )

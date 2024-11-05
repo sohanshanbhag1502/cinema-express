@@ -1,21 +1,12 @@
+import Seat from "@/components/Seat";
+
 interface SeatRowProps{
     row:string;
+    bookedList:Array<string>;
 }
 
-interface SeatProps{
-    SeatNo:number;
-    booked:boolean;
-}
-
-function Seat(props: SeatProps){
-    return (
-        <button className={'w-11 border-white border-2 font-semibold text-2xl \
-        transition-all duration-200 mx-2 '+
-        (props.booked?"bg-black text-white cursor-default":
-        "bg-white text-black hover:bg-black hover:text-white")}>
-            {props.SeatNo}
-        </button>
-    )
+interface SeatLayoutProps{
+    bookedList:Array<string>;
 }
 
 function SeatRow(props: SeatRowProps){
@@ -25,31 +16,40 @@ function SeatRow(props: SeatRowProps){
         <div className="w-full flex items-center content-center justify-center py-3
         font-mono">
             <p className="text-2xl px-2">{props.row}</p>
-            {seatNums.map((ele)=><Seat SeatNo={ele} booked={false}/>)}
+            {seatNums.map((ele)=><Seat SeatNo={ele} booked={props.bookedList.findIndex(
+                (seat)=>seat==props.row+'-'+ele)!=-1} seatRow={props.row}/>)}
         </div>
     )
 }
 
-export function SeatLayout(){
+export function SeatLayout(props: SeatLayoutProps){
     const seatRows=["A","B","C","D","E","F","G","H"]
-
-    localStorage.setItem("Seats", "H-1, A-10, B-20")
 
     return (
         <div className="w-full flex flex-col items-center content-center justify-center
         p-10">
             <div className="p-2 mb-10 mt-5 border-2 border-white text-center 
             w-full">Screen</div>
-            {seatRows.map((ele)=><SeatRow row={ele} />)}
+            {seatRows.map((ele)=><SeatRow row={ele} bookedList={props.bookedList}/>)}
             <div className="w-full flex items-center content-center justify-center py-5">
-                <button className='w-8 h-8 bg-black cursor-default
-                border-2 font-semibold text-2xl transition-all duration-200 mx-2'>
-                </button> 
+                <div className='w-8 h-8 bg-black cursor-default
+                border-2 font-semibold text-lg transition-all duration-200 mx-2
+                flex items-center content-center justify-center'>
+                    1
+                </div> 
                 <p className="pr-10">Booked</p>
-                <button className='w-8 h-8 bg-white cursor-default
-                border-2 font-semibold text-2xl transition-all duration-200 mx-2'>
-                </button> 
-                <p>Available</p>
+                <div className='w-8 h-8 bg-white cursor-default text-black
+                border-2 font-semibold text-lg transition-all duration-200 mx-2
+                flex items-center content-center justify-center'>
+                    1
+                </div> 
+                <p className="pr-10">Available</p>
+                <div className='w-8 h-8 bg-black cursor-default border-green-600
+                border-2 font-semibold text-lg transition-all duration-200 mx-2
+                flex items-center content-center justify-center text-green-600'>
+                    1
+                </div> 
+                <p>Selected</p>
             </div>
         </div>
     )

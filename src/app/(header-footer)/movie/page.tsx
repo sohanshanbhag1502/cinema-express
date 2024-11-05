@@ -3,56 +3,88 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Rating from '@mui/material/Rating';
-import { Cast, Crew } from '@/components/Categories';
+import { CastComp, Crew } from '@/components/Categories';
+import { useEffect, useState } from 'react';
+import type { Cast, Movie } from '@prisma/client';
+import { CldImage } from 'next-cloudinary';
+import Link from 'next/link';
 
 export default function MoviePage(){
     const router=useRouter();
     const params=useSearchParams();
 
-    const title=params.get('title');
-    const id=params.get('id');
+    const [movieDetails, setMovieDetails]=useState<Movie>();
+    const [movieLangs, setMovieLangs]=useState<Array<string>>();
+    const [movieCasts, setMovieCasts]=useState<Array<Cast>>();
+    const [movieGenres, setMovieGenres]=useState<Array<string>>();
+    const [rating, setRating]=useState<number>(0);
+
+
+    const id=params.get('movieId');
+
+    const fetchMovie=async()=>{
+        const res=await fetch('/api/movie-details', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                movieId: id
+            })
+        });
+        if (res.status!==200){
+            router.push('/movie?movieId=M0001');
+            return;
+        }
+        const data = await res.json();
+        setMovieDetails(data.movie);
+        setMovieGenres(data.genres);
+        setMovieLangs(data.lang);
+        setMovieCasts(data.casts);
+        setRating(data.movie.rating);
+    }
+
+    useEffect(()=>{ fetchMovie() }, [id]);
 
     return (
         <div className="w-full flex flex-col items-start content-center justify-start
         p-10">
             <div className='w-full flex items-center content-center flex-wrap'>
-                <img className='w-[20%]' src={'/'+title+'.webp'}/>
-                <div className='w-[80%] p-10 flex flex-col items-start content-center'>
+                <CldImage alt={movieDetails?.title!} src={id!+'.png'}
+                height={400} width={250} className='border-[0.25px] border-white rounded-xl'/>
+                <div className='w-[80%] pl-10 flex flex-col items-start content-center'>
                     <div className='w-full flex items-center content-center justify-between'>
-                        <h1 className="text-4xl">{title} (2024)</h1>
-                        <div>
-                            <button className='p-2 bg-white text-black border-white border-2
-                            font-semibold text-xl rounded-full transition-all duration-200 mx-2
-                            hover:bg-black hover:text-white' onClick={()=>{router.push('/book-tickets?id='+id+'&title='+title)}}>Book Your Tickets</button>
-                            <button className='p-2 bg-white text-black border-white border-2
-                            font-semibold text-xl rounded-full transition-all duration-200 mx-2
-                            hover:bg-black hover:text-white'>Rate this Movie</button>
-                        </div>
+                        <h1 className="text-4xl">{movieDetails?.title} ({movieDetails?.pubYear})</h1>
+                        <Link className='p-2 bg-white text-black border-white border-2
+                        font-semibold text-xl rounded-full transition-all duration-200
+                        hover:bg-black hover:text-white' href={{
+                            pathname: '/user/book-tickets',
+                            query: { movieId: id }
+                        }}>
+                            Book Your Tickets
+                        </Link>
                     </div>
                     <p className='font-medium text-lg flex content-center pt-2'>
-                        <Rating name="half-rating" defaultValue={4.5} precision={0.5} 
-                        readOnly/> 
-                        (22K)
+                        <Rating value={rating} precision={0.1} readOnly/> 
+                        ({movieDetails?.ratingCount}K)
                     </p>
-                    <p className='font-medium text-lg flex content-center pt-2'>
+                    <p className='font-medium text-lg flex content-center pt-2
+                    items-center justify-center'>
                         <AccessTimeIcon />&nbsp;
-                        2h 58m
+                        {movieDetails?.duration}
                     </p>
                     <p className="text-xl font-medium left-4 bg-pink-600 my-4 p-1
                     bg-opacity-60">
-                        UA+
+                        {movieDetails?.ageRating.replace('plus', '+')}
                     </p>
                     <p className='font-medium text-lg py-1'>
-                        Action, Drama, Thriller
+                        {movieGenres?.join(', ')}
                     </p>
                     <p className='py-4 font-medium text-lg'>
-                        The film`s backdrop is centered around the far and forgotten 
-                        coastal lands of India.The people,or rather the villains, in the 
-                        film neither fear death nor god and there is no sense of humanity 
-                        among them. Devara changes this scenario in his inimitable style.
+                        {movieDetails?.description}
                     </p>
                     <p className='font-medium text-lg'>
-                        Languages Available: Telugu, Kannada, Malayalam, Tamil, Hindi
+                        Languages Available: {movieLangs?.join(', ')}
                     </p>
                     <p className='font-medium text-lg py-1'>
                         Formats Available: 2D, 3D, 4D
@@ -61,12 +93,12 @@ export default function MoviePage(){
                 <div className='w-full flex flex-col items-center content-center justify-center
                 mt-10'>
                     <h2 className='w-full text-3xl font-semibold'>Film Cast</h2>
-                    <Cast stars={['Junior NTR', 'Janhvi Kapoor']}/>
+                    <CastComp stars={movieCasts}/>
                 </div>
                 <div className='w-full flex flex-col items-center content-center justify-center
                 mt-10'>
                     <h2 className='w-full text-3xl font-semibold'>Film Crew</h2>
-                    <Crew stars={['Koratala Siva', 'Nandamuri Kalyan Ram']}/>
+                    <Crew stars={movieCasts}/>
                 </div>
             </div>
         </div>

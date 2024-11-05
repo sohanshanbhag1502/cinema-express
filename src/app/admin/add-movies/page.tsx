@@ -1,48 +1,93 @@
 "use client"
 
 import { useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
+import { CldUploadButton } from 'next-cloudinary';
 
 export default function AddMoviePage(){
-    const [movieId, setMovieId] = useState("")
-    const [title, setTitle] = useState("")
-    const [description, setDescription] = useState("")
-    const [duration, setDuration] = useState("")
-    const [ageRating, setAgeRating] = useState("")
-    const [pubYear, setPubYear] = useState("")
-    const [rating, setRating] = useState(0)
-    const [ratingCount, setRatingCount] = useState(0)
+    const [movieId, setMovieId] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [duration, setDuration] = useState("");
+    const [ageRating, setAgeRating] = useState("");
+    const [pubYear, setPubYear] = useState(0);
+    const [rating, setRating] = useState("");
+    const [ratingCount, setRatingCount] = useState(0);
+    const [languages, setLanguages] = useState("");
+    const [genres, setGenres] = useState("");
+    const [casts, setCasts] = useState("");
 
-    const handleMovieChange = (e: FormEvent<HTMLInputElement>) => {
-        setMovieId(e.currentTarget.value)
+    const handleMovieChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setMovieId(e.target.value)
     }
 
-    const handleTitleChange = (e: FormEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
     }
 
-    const handleDescChange = (e: FormEvent<HTMLInputElement>) => {
-        setDescription(e.currentTarget.value)
+    const handleDescChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setDescription(e.target.value)
     }
 
-    const handleDurationChange = (e: FormEvent<HTMLInputElement>) => {
-        setDuration(e.currentTarget.value)
+    const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setDuration(e.target.value)
     }
 
-    const handleARChange = (e: FormEvent<HTMLInputElement>) => {
-        setAgeRating(e.currentTarget.value)
+    const handleARChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setAgeRating(e.target.value)
     }
 
-    const handlePYChange = (e: FormEvent<HTMLInputElement>) => {
-        setPubYear(e.currentTarget.value)
+    const handlePYChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPubYear(parseInt(e.target.value))
     }
 
-    const handleRatingChange = (e: FormEvent<HTMLInputElement>) => {
-        setRating(parseInt(e.currentTarget.value))
+    const handleRatingChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setRating(e.target.value)
     }
 
-    const handleRatingCChange = (e: FormEvent<HTMLInputElement>) => {
-        setRatingCount(parseInt(e.currentTarget.value))
+    const handleRatingCChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setRatingCount(parseInt(e.target.value))
+    }
+
+    const handleLangChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setLanguages(e.target.value)
+    }
+
+    const handleGenreChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setGenres(e.target.value)
+    }
+
+    const handleCastChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setCasts(e.target.value)
+    }
+
+    const postMovie = async (e: FormEvent<HTMLButtonElement>)=>{
+        e.preventDefault();
+        const res=await fetch('/api/admin/add-items/movie', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                movieId,
+                title,
+                description,
+                duration,
+                ageRating,
+                pubYear,
+                rating:parseFloat(rating),
+                ratingCount,
+                languages:languages.split(", "),
+                genres:genres.split(", "),
+                casts:casts.split(", ")
+            })
+        });
+        if (res.status===200){
+            alert("Added the Movie successfully");
+        }
+        else{
+            alert("Something went wrong");
+        }
     }
 
     return (
@@ -59,12 +104,14 @@ export default function AddMoviePage(){
                     <label className="text-2xl py-[0.8rem]">Publish Year :</label>
                     <label className="text-2xl py-[0.8rem]">Rating :</label>
                     <label className="text-2xl py-[0.8rem]">Rating Count:</label>
+                    <label className="text-2xl py-[0.8rem]">Languages:</label>
+                    <label className="text-2xl py-[0.8rem]">Genres:</label>
+                    <label className="text-2xl py-[0.8rem]">Casts (IDs):</label>
+                    <label className="text-2xl py-[0.8rem]">Poster Upload:</label>
                 </div>
                 <div className="w-[70%] flex flex-col items-start content-center">
                     <input
                         type="text"
-                        id="name"
-                        name="name"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={movieId}
@@ -73,8 +120,6 @@ export default function AddMoviePage(){
                     />
                     <input
                         type="text"
-                        id="username"
-                        name="username"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={title}
@@ -82,9 +127,7 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={description}
@@ -92,9 +135,7 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={duration}
@@ -102,9 +143,7 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={ageRating}
@@ -112,9 +151,7 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="number"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={pubYear}
@@ -122,9 +159,7 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={rating}
@@ -132,21 +167,51 @@ export default function AddMoviePage(){
                         required
                     />
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
                         className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
                         text-white w-full bg-transparent text-xl text-start"
                         value={ratingCount}
                         onChange={handleRatingCChange}
                         required
                     />
+                    <input
+                        type="text"
+                        className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
+                        text-white w-full bg-transparent text-xl text-start"
+                        value={languages}
+                        onChange={handleLangChange}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
+                        text-white w-full bg-transparent text-xl text-start"
+                        value={genres}
+                        onChange={handleGenreChange}
+                        required
+                    />
+                    <input
+                        type="text"
+                        className="my-[0.63rem] p-1 border border-gray-300 rounded-lg 
+                        text-white w-full bg-transparent text-xl text-start"
+                        value={casts}
+                        onChange={handleCastChange}
+                        required
+                    />
+                    <CldUploadButton uploadPreset="cinema-express-movie-poster"
+                    className="w-full text-xl p-2 text-black bg-white rounded-full
+                    font-semibold hover:text-white hover:bg-black border-2 
+                    border-white transition-all duration-150 cursor-pointer"
+                    signatureEndpoint={'/api/admin/auth-upload'}>
+                        Upload Poster
+                    </CldUploadButton>
                 </div>
             </div>
             <div className="w-full flex items-center content-center justify-evenly">
                 <button className='p-2 bg-white text-black border-white 
                 border-2 font-semibold text-xl rounded-full transition-all duration-200 
-                mx-2 hover:bg-black hover:text-white'>
+                mx-2 hover:bg-black hover:text-white'
+                onClick={postMovie}>
                     Add Movie
                 </button>
             </div>

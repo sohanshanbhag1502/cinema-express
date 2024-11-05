@@ -13,23 +13,24 @@ export async function POST(req: NextRequest){
         return NextResponse.json(validation.error.errors, {status: 400});
     }
 
-    const user = await prisma.admin.findUnique({
+    const admin = await prisma.admin.findUnique({
         where: {
             adminId: validation.data.adminId
         }
     });
 
-    if (!user){
+    if (!admin){
         return NextResponse.json({message: "Admin not Registered"}, {status: 404});
     }
 
-    const {adminId, passwd} = user;
+    const {adminId, passwd} = admin;
 
     if (await bcrypt.compare(validation.data.passwd, passwd)) {
         const CookieStore=cookies();
         const token=await sign({adminId, role:"admin"}, process.env.JWT_SECRET!);
-        CookieStore.set("auth-token", token, {httpOnly: true, path: "/"});
-        return NextResponse.json(user, {status: 200});
+        CookieStore.set("auth-token", token, {httpOnly: true, path: "/", 
+            sameSite: "strict", maxAge: 60*60*24*7});
+        return NextResponse.json(admin, {status: 200});
     }
     else{
         return NextResponse.json({message: "Invalid Password"}, {status: 401});

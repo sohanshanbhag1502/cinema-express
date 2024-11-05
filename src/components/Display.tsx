@@ -4,15 +4,14 @@ export default function Display() {
     return (
         <div className="w-full flex flex-col content-center justify-start items-center 
         my-4 text-left">
-            <Categories title="City" categories={["Bengaluru", "Chennai", "Chandigarh",
+            <Categories title="city" categories={["Bengaluru", "Chennai", "Chandigarh",
                 "Delhi", "Hyderabad", "Pune", "Mumbai", "Kochi", "Trivandrum"]}/>
-            <Categories title="Genre" categories={["Comedy", "Horror", "Action", "Drama",
+            <Categories title="genre" categories={["Comedy", "Horror", "Action", "Drama",
                 "SciFi","Thriller", "Adventure", "Documentary", "Mystery",
                 "History", "Animation", "Fiction", "Fantasy", "Crime", "Biography"]}/>
-            <Categories title="Language" categories={["English", "Hindi", "Telugu", 
+            <Categories title="language" categories={["English", "Hindi", "Telugu", 
                 "Kannada", "Malayalam", "Tamil", "Marathi"]}/>
-            <Categories title="Age Category" categories={["U", "UA", "A"]}/>
-            <Categories title="Format" categories={["2D", "3D", "4D"]}/>
+            <Categories title="ageRating" categories={["U+", "UA+", "A+"]}/>
         </div>
     )
 }

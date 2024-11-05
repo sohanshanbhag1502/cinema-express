@@ -28,7 +28,8 @@ export async function POST(req: NextRequest){
     if (await bcrypt.compare(validation.data.passwd, passwd)) {
         const CookieStore=cookies();
         const token=await sign({userId, role:"user"}, process.env.JWT_SECRET!);
-        CookieStore.set("auth-token", token, {httpOnly: true, path: "/"});
+        CookieStore.set("auth-token", token, {httpOnly: true, path: "/",
+            sameSite: "strict", maxAge: 60*60*24*7});
         return NextResponse.json(user, {status: 200});
     }
     else{
