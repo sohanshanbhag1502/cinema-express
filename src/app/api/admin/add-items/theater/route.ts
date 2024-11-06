@@ -1,13 +1,13 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import prisma from "../../../../../prisma/client";
+import prisma from "@/prisma/client";
 import TheaterSchema from "@/lib/models/theater";
 
 export async function POST(req: NextRequest){
     const body = await req.json();
     const validation = TheaterSchema.safeParse(body);
     if (!validation.success){
-        return NextResponse.json({message: validation.error.errors}, {status: 400});
+        return NextResponse.json({error: validation.error.errors}, {status: 400});
     }
     const etheater = await prisma.theater.findUnique({
         where: {

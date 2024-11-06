@@ -39,8 +39,12 @@ export default function AddTheaterPage(){
                 address
             })
         });
+        const message=await res.json();
         if (res.status===200){
             alert("Added the theater successfully");
+        }
+        else if (message.error && message.error.length>0){
+            alert("Please check the details entered.")
         }
         else{
             alert("Something went wrong");

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest){
     body.dob= new Date(body.dob);
     const validation = UserSchema.safeParse(body);
     if(!validation.success){
-        return NextResponse.json(validation.error.errors, {status: 400});
+        return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
     const user = await prisma.user.findUnique({

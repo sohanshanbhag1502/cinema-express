@@ -14,7 +14,8 @@ export interface Filters{
     genre:string | undefined | null,
     city:string | undefined | null,
     language:string | undefined | null,
-    ageRating:string | undefined | null
+    ageRating:string | undefined | null,
+    movieTitle:string | undefined | null
 }
 
 export default function SearchPage(){
@@ -26,7 +27,8 @@ export default function SearchPage(){
         genre:params.get("genre"),
         city:params.get("city"),
         language:params.get("language"),
-        ageRating:params.get("ageRating")
+        ageRating:params.get("ageRating"),
+        movieTitle:params.get("movieTitle")
     });
     const router=useRouter();
 
@@ -39,6 +41,8 @@ export default function SearchPage(){
         value={filters?.language}/>)
     if(filters?.ageRating) filterCards.push(<FilterCard type="ageRating"
         value={filters?.ageRating}/>)
+    if(filters?.movieTitle) filterCards.push(<FilterCard type="movieTitle"
+        value={filters?.movieTitle}/>)
 
     const postSearch=async ()=>{
         const response=await fetch("/api/search",{
@@ -58,7 +62,8 @@ export default function SearchPage(){
             genre:params.get("genre"),
             language:params.get('language'),
             city:params.get('city'),
-            ageRating:params.get('ageRating')
+            ageRating:params.get('ageRating'),
+            movieTitle:params.get("movieTitle")
         })
     },[params])
 
@@ -73,14 +78,15 @@ export default function SearchPage(){
             newQuery['language']=filters?.language
         if(filters?.ageRating) 
             newQuery['ageRating']=filters?.ageRating
+        if(filters?.movieTitle) 
+            newQuery['movieTitle']=filters?.movieTitle
         router.push(`/search?${new URLSearchParams(newQuery).toString()}`);
         postSearch();
     },[filters]);
 
     const sortResults=()=>{
         if (sortOrder==="asc") setSortOrder("desc")
-        else if (sortOrder==="") setSortOrder("asc")
-        else setSortOrder("")
+        else if (sortOrder==="" || sortOrder==="desc") setSortOrder("asc")
         setMovies([...movies].sort((a,b)=>{
             if(sortOrder==="asc") return a.title.localeCompare(b.title)
             else return b.title.localeCompare(a.title)

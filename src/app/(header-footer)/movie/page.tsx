@@ -33,7 +33,8 @@ export default function MoviePage(){
             })
         });
         if (res.status!==200){
-            router.push('/movie?movieId=M0001');
+            alert('Invalid Details Provided');
+            router.push('/');
             return;
         }
         const data = await res.json();
@@ -50,7 +51,7 @@ export default function MoviePage(){
         <div className="w-full flex flex-col items-start content-center justify-start
         p-10">
             <div className='w-full flex items-center content-center flex-wrap'>
-                <CldImage alt={movieDetails?.title!} src={id!+'.png'}
+                <CldImage alt={movieDetails?.title!} src={id!+'.avif'}
                 height={400} width={250} className='border-[0.25px] border-white rounded-xl'/>
                 <div className='w-[80%] pl-10 flex flex-col items-start content-center'>
                     <div className='w-full flex items-center content-center justify-between'>

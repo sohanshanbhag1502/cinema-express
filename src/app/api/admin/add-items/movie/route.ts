@@ -9,7 +9,7 @@ export async function POST(req: NextRequest){
 
     if (!validation.success){
         console.log(validation.error.errors);
-        return NextResponse.json(validation.error.errors, {status: 400});
+        return NextResponse.json({error: validation.error.errors}, {status: 400});
     }
 
     const emovie = await prisma.movie.findUnique({

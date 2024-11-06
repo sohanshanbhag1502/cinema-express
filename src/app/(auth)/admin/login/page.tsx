@@ -20,6 +20,9 @@ function Loginpage() {
         if (res.status===200){
             router.push('/admin')
         }
+        else if (message.error && message.error.length>0){
+            alert("Please check the details entered.")
+        }
         else if (message.message==='Admin not Registered' || 
             message.message==='Invalid Password'){
             alert("Either Username or Password is Incorrect.")

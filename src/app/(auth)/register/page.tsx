@@ -73,6 +73,9 @@ function SignupPage() {
             alert("User registered successfully.")
             router.push('/login')
         }
+        else if (message.error && message.error.length>0){
+            alert("Please check the details entered.")
+        }
         else if (message.message==='User already exists'){
             alert("Username already exists.")
         }

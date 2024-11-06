@@ -26,6 +26,9 @@ function Loginpage() {
         if (res.status===200){
             router.push('/user/profile')
         }
+        else if (message.error && message.error.length>0){
+            alert("Please check the details entered.")
+        }
         else if (message.message==='User not Registered' || 
             message.message==='Invalid Password'){
             alert("Either Username or Password is Incorrect.")

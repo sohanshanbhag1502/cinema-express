@@ -7,7 +7,6 @@ import { MovieProps } from "@/components/Cards";
 export async function POST(req: NextRequest){
     const body = await req.json();
     const {movieTitle, city, genre, ageRating, language} = body;
-    console.log(body);
     var res1: string[]=[];
     var res2: string[]=[];
     var res3: string[]=[];
@@ -23,7 +22,8 @@ export async function POST(req: NextRequest){
         res1 = (await prisma.movie.findMany({
             where: {
                 title: {
-                    contains: movieTitle.trim()
+                    contains: movieTitle.trim(),
+                    mode: 'insensitive'
                 }
             }
         })).map((movie: Movie) => movie.movieId);
@@ -83,8 +83,6 @@ export async function POST(req: NextRequest){
         .filter((movieId: string) => genre?res3.includes(movieId):true)
         .filter((movieId: string) => ageRating?res4.includes(movieId):true)
         .filter((movieId: string) => language?res5.includes(movieId):true);
-
-    console.log(res1, res2, res3, res4, res5);
 
     if (resId){
         [res, resGenres]=await Promise.all([

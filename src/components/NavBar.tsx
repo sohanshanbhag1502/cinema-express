@@ -1,12 +1,22 @@
 "use client"
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import DropDown from "@/components/DropDown";
+import { useRouter } from "next/navigation";
 
 export function NavBar(){
     const [loggedIn, setLoggedIn] = useState(false);
     const [id, setId] = useState("");
+    const [search, setSearch] = useState("");
+    const router = useRouter();
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>)=> {setSearch(e.target.value)}
+    const handleEnter = (e:KeyboardEvent<HTMLInputElement>)=>{
+        if (e.key === "Enter"){
+            router.push(`/search?movieTitle=${search}`)
+        }
+    }
 
     const checkLoggedIn = async () => {
         const res = await fetch('/api/auth/loggedIn', {
@@ -32,7 +42,8 @@ export function NavBar(){
             </Link>
             <input className="text-xl rounded-full border-white border-2 bg-black p-2
             w-[40%] focus:border-2" id="searchfield"
-            placeholder="Search for movies here..." />
+            placeholder="Search for movies here..." 
+            value={search} onChange={handleChange} onKeyDown={handleEnter}/>
             <div className="flex content-center items-center justify-between px-[1%]
             w-[40%]">
                 <Link href="/" className="text-xl font-semibold cursor-pointer

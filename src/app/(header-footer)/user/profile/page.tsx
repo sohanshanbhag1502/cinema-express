@@ -69,7 +69,7 @@ export default function ProfilePage(){
             setGender(data.gender)
         }
         else{
-            alert("Something went wrong. Please try again.")
+            alert("Unable to retrive the profile.")
         }
     }
 

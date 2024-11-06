@@ -1,6 +1,7 @@
 "use client"
 
 import { BookingCard } from "@/components/Cards";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface BookingDetails{
@@ -18,6 +19,7 @@ interface BookingDetails{
 export default function MyBookings(){
 
     const [bookings, setBookings] = useState<Array<BookingDetails>>([]);
+    const router = useRouter();
 
     const fetchAllBookings = async ()=>{
         const res=await fetch('/api/user/bookings/all-bookings', {
@@ -31,6 +33,7 @@ export default function MyBookings(){
         }
         else{
             alert("Something went wrong while getting all bookings");
+            router.push('/');
         }
     }
 

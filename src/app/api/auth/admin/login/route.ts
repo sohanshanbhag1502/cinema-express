@@ -10,7 +10,7 @@ export async function POST(req: NextRequest){
     const body = await req.json();
     const validation = AdminLogin.safeParse(body);
     if(!validation.success){
-        return NextResponse.json(validation.error.errors, {status: 400});
+        return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
     const admin = await prisma.admin.findUnique({

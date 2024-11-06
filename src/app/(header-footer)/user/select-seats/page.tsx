@@ -52,6 +52,7 @@ export default function SelectSeats(){
             })
         });
         if (res.status!==200){
+            alert('Invalid Details Provided');
             router.push('/');
             return;
         }

@@ -67,6 +67,7 @@ export default function BookTicketsPage(){
             })
         });
         if (res.status!==200){
+            alert('Invalid Details Provided');
             router.push('/');
             return;
         }

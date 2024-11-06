@@ -36,6 +36,7 @@ export default function BookingConfirmationPage(){
             })
         });
         if (res.status!==200){
+            alert('Invalid Details Provided');
             router.push('/');
             return;
         }

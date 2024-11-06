@@ -80,7 +80,7 @@ export function StarCard(props: StarProps){
         target="_blank" key={props.id}>
             <div className="w-full flex flex-col items-center content-center 
             justify-center text-center">
-                <CldImage alt={props.name} src={props.id!+'.png'}
+                <CldImage alt={props.name} src={props.id!+'.avif'}
                 height={400} width={250} className='border-[0.25px] 
                 border-white rounded-full'/>
                 <p className="pt-4 font-medium text-md">{props.name}</p>
@@ -112,7 +112,7 @@ export function MovieCard(props:MovieProps){
             bg-opacity-60 top-[15rem] p-[1px]">
                 {props.pubYear}
             </p>
-            <CldImage alt={props.title} src={props.movieId!+'.png'}
+            <CldImage alt={props.title} src={props.movieId!+'.avif'}
             height={500} width={300} className='border-[0.25px] 
             border-white'/>
             <h1 className="text-2xl font-medium mt-2">{props.title}</h1>
@@ -183,7 +183,7 @@ export function BookingCard(props: BookingProps){
         }}>
             <p className="text-2xl">Booking Id: {props.bookingId}</p>
             <div className="w-full flex items-center content-center py-2">
-                <CldImage alt={props.movieTitle} src={props.movieId!+'.png'}
+                <CldImage alt={props.movieTitle} src={props.movieId!+'.avif'}
                 height={100} width={50} className='border-[0.25px] 
                 border-white rounded-xl'/>
                 <div className="w-full flex flex-col items-start content-center px-5">
