@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import UserSchema from "@/lib/models/user";
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest){

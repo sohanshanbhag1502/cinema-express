@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import {AdminLogin} from "@/lib/models/admin";
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { sign } from "@/lib/JWT";

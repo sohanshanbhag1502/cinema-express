@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 import MovieSchema from "@/lib/models/movie";
 
 export async function POST(req: NextRequest){

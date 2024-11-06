@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import AdminSchema from "@/lib/models/admin";
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest){
