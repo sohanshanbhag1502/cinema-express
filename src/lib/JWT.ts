@@ -22,7 +22,7 @@ export async function sign(payload: JWTPayload, secret: string): Promise<string>
 }
 
 export async function verify(token: string | undefined, secret: string): 
-    Promise<tokenPayload> {
+Promise<tokenPayload> {
     const {payload} = await jwtVerify(token!, new TextEncoder().encode(secret));
     const tokenPayload = payload as unknown as tokenPayload;
     return tokenPayload;

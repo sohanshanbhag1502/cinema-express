@@ -3,42 +3,52 @@ import type { NextRequest } from 'next/server';
 import { tokenPayload, verify } from '@/lib/JWT';
 
 export async function middleware(req: NextRequest) {
-    // if (req.url.includes('/api') && req.method!=='POST') {
-    //     return NextResponse.redirect(new URL('/not-found', req.url));
-    // }
-    // if ((req.cookies.get('auth-token') || 
-    // req.url.includes('/user/') || req.url.includes('/admin')) && 
-    // !req.url.includes('/api/auth/') && !req.url.endsWith('/admin/login')) {
-    //     const cookie = req.cookies.get('auth-token');
-    //     if (!cookie) {
-    //         return NextResponse.redirect(new URL('/login', req.url));
-    //     }
-
-    //     try{
-    //         var token: tokenPayload = await verify(cookie.value, process.env.JWT_SECRET!);
-    //     }
-    //     catch{
-    //         return NextResponse.redirect(new URL('/login', req.url));
-    //     }
-
-    //     if (!token) {
-    //         return NextResponse.redirect(new URL('/login', req.url));
-    //     }
-
-    //     if (token.role==='user' && (req.url.endsWith('/login') || 
-    //     req.url.endsWith('/register')) && !req.url.includes('/api/'))
-    //         return NextResponse.redirect(new URL('/user/profile', req.url));
-    //     else if (token.role==='admin' && req.url.endsWith('/admin/login') || 
-    //     req.url.endsWith('/admin/register') && !req.url.includes('/api/'))
-    //         return NextResponse.redirect(new URL('/admin', req.url));
-
-    //     if (token.role==='user' && req.url.includes('/admin') && 
-    //     !req.url.includes('/api'))
-    //         return NextResponse.redirect(new URL('/user/profile', req.url));
-    //     else if (token.role==='admin' && req.url.includes('/user') && 
-    //     !req.url.includes('/api')) 
-    //         return NextResponse.redirect(new URL('/admin', req.url));
-    // }
-
+    const path = new URL(req.url).pathname;
+    const cookie = req.cookies.get('auth-token');
+    if (cookie && cookie.value){
+        var payload : tokenPayload | null = null;
+        try{
+            payload = await verify(cookie.value, 
+                process.env.JWT_SECRET!);
+        } catch (e) {
+            if (path.includes('/user')){
+                return NextResponse.redirect(new URL('/login', req.url));
+            }
+            else if (path.includes('/admin')){
+                return NextResponse.redirect(new URL('/admin/login', req.url));
+            }
+        }
+        if (payload){
+            if (payload.role === 'user' && (path==='/login' || path==='/register')){
+                return NextResponse.redirect(new URL('/user/profile', req.url));
+            }
+            else if (payload.role === 'admin' && (path==='/admin/login' || 
+                path==='/admin/register')){
+                return NextResponse.redirect(new URL('/admin', req.url));
+            }
+            else if (payload.role === 'admin' && (path.startsWith('/user')
+            || path.startsWith('/api/user'))){
+                return NextResponse.redirect(new URL('admin', req.url));
+            }
+            else if (payload.role === 'user' && (path.startsWith('/admin')
+            || path.startsWith('/api/admin'))){
+                return NextResponse.redirect(new URL('/user', req.url));
+            }
+        }
+        else if (path.includes('/user')){
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+        else if (path.includes('/admin')){
+            return NextResponse.redirect(new URL('/admin/login', req.url));
+        }
+    }
+    else if (path.startsWith('/user') && !(path==='/login')
+        && !(path==='/register')){
+        return NextResponse.redirect(new URL('/login', req.url));
+    }
+    else if (path.startsWith('/admin') && !(path==='/admin/login')
+        && !(path==='/admin/register')){
+        return NextResponse.redirect(new URL('/admin/login', req.url));
+    }
     return NextResponse.next();
 }
