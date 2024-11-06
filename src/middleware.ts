@@ -7,8 +7,8 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/not-found', req.url));
     }
     if ((req.cookies.get('auth-token') || 
-    req.url.includes('/user/') || (req.url.includes('/admin') && 
-    !req.url.endsWith('/admin/login'))) && !req.url.includes('/api/auth/')) {
+    req.url.includes('/user/') || req.url.includes('/admin')) && 
+    !req.url.includes('/api/auth/') && !req.url.endsWith('/admin/login')) {
         const cookie = req.cookies.get('auth-token');
         if (!cookie) {
             return NextResponse.redirect(new URL('/login', req.url));
