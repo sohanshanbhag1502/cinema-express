@@ -8,7 +8,6 @@ export async function POST(req: NextRequest){
     const validation = MovieSchema.safeParse(body);
 
     if (!validation.success){
-        console.log(validation.error.errors);
         return NextResponse.json({error: validation.error.errors}, {status: 400});
     }
 

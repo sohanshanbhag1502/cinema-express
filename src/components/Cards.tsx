@@ -127,10 +127,6 @@ export function MovieCard(props:MovieProps){
 export function FilterCard(props: FilterProps){
     const params = useSearchParams();
     const router = useRouter();
-    const filterCards = [];
-    for(let entry of params.entries()) {
-        filterCards.push()
-    }
     return (
         <div className="m-1 p-1 bg-blue-700 flex items-center content-center
         justify-evenly rounded-full">
@@ -146,7 +142,6 @@ export function FilterCard(props: FilterProps){
                         newQuery[entry[0]] = entry[1];
                     }
                 }
-                console.log(newQuery);
                 router.push(`/search?${new URLSearchParams(newQuery).toString()}`);
             }}>
                 X

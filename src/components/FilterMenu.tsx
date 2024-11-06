@@ -1,4 +1,4 @@
-import { Filters } from "@/app/(header-footer)/search/page";
+import { Filters } from "@/app/(frontend)/(header-footer)/search/page";
 
 function FilterButton(props:{category:string, text:string, filterList:Filters, 
     setFilter:React.Dispatch<React.SetStateAction<Filters>>}) {

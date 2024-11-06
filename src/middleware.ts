@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
             }
             else if (payload.role === 'user' && (path.startsWith('/admin')
             || path.startsWith('/api/admin'))){
-                return NextResponse.redirect(new URL('/user', req.url));
+                return NextResponse.redirect(new URL('/user/profile', req.url));
             }
         }
         else if (path.includes('/user')){

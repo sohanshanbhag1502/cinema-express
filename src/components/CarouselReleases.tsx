@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { MovieCard, MovieProps } from "@/components/Cards";
+import { useSnackbar } from "notistack";
 
 const Carousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -79,6 +80,7 @@ const Carousel = () => {
 
 export function Releases(){
     const [releases, setReleases] = useState<Array<MovieProps>>([]);
+    const {enqueueSnackbar} = useSnackbar();
 
     const fetchAllReleases = async ()=>{
         const res=await fetch('/api/fetch-releases', {
@@ -89,11 +91,11 @@ export function Releases(){
         });
         if (res.status===200){
             const data:MovieProps[]=await res.json();
-            console.log(data)
             setReleases(data);
         }
         else{
-            alert("Something went wrong while loading the page");
+            enqueueSnackbar("Something went wrong while loading the page", 
+                {variant: 'error'});
         }
     }
 
