@@ -6,12 +6,14 @@ import { CldImage } from "next-cloudinary";
 import { useSearchParams, useRouter } from "next/navigation";
 
 interface CardProps {
+    key: string;
     title: string;
     category: string;
     image: string;
 }
 
 interface StarProps{
+    key:string;
     id:string;
     name: string;
     designation: string;
@@ -19,6 +21,7 @@ interface StarProps{
 }
 
 export interface MovieProps {
+    key:string;
     movieId: string;
     title: string;
     pubYear: number;
@@ -33,6 +36,7 @@ interface FilterProps{
 }
 
 interface ShowTimeProps{
+    key:string;
     movieId: string;
     theaterId: string;
     date:string;
@@ -40,6 +44,7 @@ interface ShowTimeProps{
 }
 
 interface BookingProps{
+    key:string;
     bookingId: string;
     movieId: string;
     movieTitle: string;

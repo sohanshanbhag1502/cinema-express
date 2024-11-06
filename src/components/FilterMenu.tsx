@@ -36,7 +36,7 @@ function FilterList(props:{category:string, categories:string[], filterList:Filt
         <div className="w-full flex-wrap items-center content-center py-5">
             <p className="text-2xl">{props.category}:</p>
             {props.categories.map((category)=><FilterButton text={category}
-            filterList={props.filterList} setFilter={props.setFilter}
+            filterList={props.filterList} setFilter={props.setFilter} key={category}
             category={props.category}/>)}
         </div>
     )

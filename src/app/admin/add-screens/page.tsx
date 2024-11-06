@@ -87,7 +87,7 @@ export default function AddScreenPage(){
                                 borderRadius:"20px", fontSize:"1.3rem"
                             }}
                         >
-                            {res.map((ele)=><MenuItem value={ele[1]}
+                            {res.map((ele, ind)=><MenuItem value={ele[1]} key={ind}
                             sx={{fontSize:"1.1rem"}}
                             >{ele[0]}</MenuItem>)}
                         </Select>

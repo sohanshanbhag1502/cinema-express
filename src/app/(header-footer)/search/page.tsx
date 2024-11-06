@@ -121,7 +121,7 @@ export default function SearchPage(){
                 {filterCards}
             </div>
             <div className="w-full flex flex-wrap justify-evenly xl:p-10 xs:p-3">
-                {movies.map((movie)=><MovieCard {...movie}/>)}
+                {movies.map((movie)=><MovieCard {...movie} key={movie.movieId}/>)}
             </div>
         </div>
     )

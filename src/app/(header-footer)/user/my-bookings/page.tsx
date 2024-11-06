@@ -40,7 +40,7 @@ export default function MyBookings(){
         <div className="w-full p-10 flex flex-col items-start content-center">
             <h1 className="text-3xl font-bold">My Bookings</h1>
             <div className="w-full p-5 flex flex-col items-center content-center">
-                {bookings.map((value)=><BookingCard {...value} />)}
+                {bookings.map((value)=><BookingCard {...value} key={value.bookingId}/>)}
             </div>
         </div>
     )

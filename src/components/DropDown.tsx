@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import { BiDownArrow } from "react-icons/bi";
 import { VscAccount } from "react-icons/vsc";
 import { useRouter } from "next/navigation";
@@ -25,12 +25,15 @@ export default function DropDown({userName, setLoggedIn}:
         }
     }
 
-    window.addEventListener('click', function(e: MouseEvent){
-        const target = e.target as HTMLElement
-        if (target.id !== "dropButton" && target.id !== "logout"){
-            setDrop(false)
-        }
-    })
+    useEffect(()=>{
+        window.addEventListener('click', function(e: MouseEvent){
+            const target = e.target as HTMLElement
+            if (target.id !== "dropButton" && target.id !== "logout"){
+                setDrop(false)
+            }
+        })
+    }, [])
+
     return(
         <>
             <div className="w-[30%] rounded-3xl text-xl hover:text-blue-700 flex 

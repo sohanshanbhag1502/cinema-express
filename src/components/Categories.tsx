@@ -17,6 +17,7 @@ interface TheaterProps{
     movieId: string;
     date:string;
     address:string;
+    key:string;
 }
 
 export function Categories(props: CategoryProps){
@@ -26,7 +27,7 @@ export function Categories(props: CategoryProps){
             <h3 className="text-3xl font-extrabold">Search By {props.title}</h3>
             <div className="w-full grid grid-flow-col justify-evenly gap-9 my-4 
             overflow-x-auto p-5">
-                {props.categories.map((ele)=><Card title={ele} image={ele} 
+                {props.categories.map((ele, ind)=><Card title={ele} image={ele} key={ind.toString()}
                 category={props.title}/>)}
             </div>
         </div>
@@ -37,8 +38,8 @@ export function CastComp(props: CastProps){
     return (
         <div className="w-full flex items-start content-center
             overflow-x-auto p-5">
-            {props.stars?.map((ele)=>
-                ele.role==="Actor"?<StarCard name={ele.name} designation="Actor" 
+            {props.stars?.map((ele, ind)=>
+                ele.role==="Actor"?<StarCard name={ele.name} designation="Actor" key={ind.toString()}
                 biolink={ele.biolink} id={ele.castId}/>:<></>)
             }
         </div>
@@ -49,8 +50,8 @@ export function Crew(props: CastProps){
     return (
         <div className="w-full flex items-start content-center
             overflow-x-auto p-5">
-            {props.stars?.map((ele)=>
-                ele.role!=="Actor"?<StarCard name={ele.name} designation={ele.role} 
+            {props.stars?.map((ele, ind)=>
+                ele.role!=="Actor"?<StarCard name={ele.name} designation={ele.role} key={ind.toString()}
                 biolink={ele.biolink} id={ele.castId}/>:<></>)
             }
         </div>
@@ -62,7 +63,7 @@ export function TheaterDisplay(props:TheaterProps){
         <div className="w-full flex-col items-start content-center mt-5">
             <h1 className="text-lg font-semibold">{props.name}, {props.address}</h1>
             <div className="w-full flex flex-wrap">
-                {props.showtimes.map((ele)=><ShowTimeCard time={ele}
+                {props.showtimes.map((ele, ind)=><ShowTimeCard time={ele} key={ind.toString()}
                 movieId={props.movieId} theaterId={props.theaterId} 
                 date={props.date}/>)}
             </div>

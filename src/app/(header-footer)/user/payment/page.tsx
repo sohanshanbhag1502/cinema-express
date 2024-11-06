@@ -118,7 +118,7 @@ export default function PaymentPage(){
                                 borderRadius:"50px", fontSize:"1.3rem", margin:"1rem"
                             }}
                         >
-                            {methods.map((ele)=><MenuItem value={ele}
+                            {methods.map((ele, ind)=><MenuItem value={ele} key={ind}
                             sx={{fontSize:"1.1rem"}}
                             >{ele}</MenuItem>)}
                         </Select>

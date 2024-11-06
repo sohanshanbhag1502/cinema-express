@@ -105,7 +105,7 @@ export function Releases(){
             <h3 className="text-3xl font-extrabold">New Releases</h3>
             <div className="w-full grid grid-flow-col justify-evenly gap-9 
             overflow-x-auto p-5">
-                {releases.map((ele)=><MovieCard {...ele}/>)}
+                {releases.map((ele)=><MovieCard {...ele} key={ele.movieId}/>)}
             </div>
         </div>
     )

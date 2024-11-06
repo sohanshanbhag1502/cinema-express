@@ -105,6 +105,7 @@ export async function POST(req: NextRequest){
         ])
         for (var movie of res){
             retRes.set(movie.movieId, {
+                key:movie.movieId,
                 movieId: movie.movieId,
                 title: movie.title,
                 pubYear: movie.pubYear,

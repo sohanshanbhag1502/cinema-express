@@ -5,7 +5,7 @@ export default function ContactUs(){
             <h1 className="text-4xl font-bold">Contact Us - Cinema Express</h1>
             <p className="w-full text-lg pt-5 font-medium text-center">
                 We love hearing from our movie enthusiasts! Whether you have a question, 
-                feedback, or simply want to say hello, we're here to help. 
+                feedback, or simply want to say hello, we&apos;re here to help. 
                 At Cinema Express, we strive to provide the best experience for our 
                 readers and visitors. Feel free to reach out to us through any of the 
                 channels below.
@@ -14,7 +14,7 @@ export default function ContactUs(){
                 <br/>
                 <span className="text-2xl font-semibold">General Inquiries</span> 
                 <br/>For any general questions or comments regarding our site, content, or 
-                services, drop us an email or give us a call, and we'll get back to you 
+                services, drop us an email or give us a call, and we&apos;ll get back to you 
                 as soon as possible.
                 <br/>Email: info@cinemaexpress.com
                 <br/>Phone: +1 (555) 123-4567

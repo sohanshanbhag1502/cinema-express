@@ -32,6 +32,7 @@ export async function POST(req: NextRequest){
 
     movies.forEach(movie => {
         retMovies.push({
+            key:movie.movieId,
             movieId: movie.movieId,
             title: movie.title,
             pubYear: movie.pubYear,

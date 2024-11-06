@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@/app/globals.css";
 import { NavBar } from "@/components/NavBar";
 import { FootBar } from "@/components/FootBar";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
             <body className={inter.className}>
                 <div className="w-full flex flex-col">
                     <NavBar />
-                    {children}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        {children}
+                    </Suspense>
                     <FootBar />
                 </div>
             </body>

@@ -11,7 +11,7 @@ export default function About(){
             As a leading online movie ticket booking platform, we are dedicated to 
             delivering a smooth and convenient booking experience for every movie lover. 
             Our mission is simple: to make the excitement of cinema easily accessible to 
-            everyone, whether you're planning a fun night out with friends, a cozy date, 
+            everyone, whether you&apos;re planning a fun night out with friends, a cozy date, 
             or a family movie outing. Founded with a passion for entertainment, Cinema 
             Express connects you to a vast selection of the latest releases, indie films,
             and timeless classics, all from the comfort of your home or on the go. With 
@@ -26,9 +26,9 @@ export default function About(){
             experience at a great value. We also understand the importance of keeping 
             our users informed. Our real-time updates ensure you are always in the know 
             about upcoming releases, sold-out shows, or special screenings. Cinema 
-            Express is more than just a booking service—it's your guide to the world of 
+            Express is more than just a booking service—it&apos;s your guide to the world of 
             cinema. At the heart of Cinema Express is our commitment to customer 
-            satisfaction. Whether you're looking to book tickets for the latest 
+            satisfaction. Whether you&apos;re looking to book tickets for the latest 
             blockbuster, discover hidden gems in the indie scene, or relive the 
             nostalgia of classic films, we are here to make sure your movie-going 
             experience is as exciting and stress-free as possible. Join us at Cinema 

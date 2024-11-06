@@ -128,7 +128,7 @@ export default function BookTicketsPage(){
                                     paddingX:"0.5rem", marginX:"1rem", marginY:"0.2rem"
                                 }}
                             >
-                                {cities.map((ele)=><MenuItem value={ele}
+                                {cities.map((ele, ind)=><MenuItem value={ele} key={ind}
                                 sx={{fontSize:"1.1rem"}}>{ele}</MenuItem>)}
                             </Select>
                         </li>
@@ -152,7 +152,7 @@ export default function BookTicketsPage(){
             <div className='w-full flex flex-col items-start content-center py-10'>
                 <h1 className='text-2xl font-bold'>Select Theater and Show Time</h1>
                 {shows?.map((val)=>
-                <TheaterDisplay {...val}/>)}
+                <TheaterDisplay {...val} key={val.movieId}/>)}
             </div>
         </div>
     )
