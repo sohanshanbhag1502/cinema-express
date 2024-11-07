@@ -188,7 +188,7 @@ export default function ProfilePage(){
                 </button>
                 <Link className='p-2 mt-6 bg-white text-black border-white border-2
                 font-semibold text-xl rounded-full transition-all duration-200 mx-2
-                hover:bg-black hover:text-white' href='/my-bookings'>
+                hover:bg-black hover:text-white' href='/user/my-bookings'>
                     Go to My Bookings
                 </Link>
             </div>
