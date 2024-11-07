@@ -8,7 +8,7 @@ export const context = createContext<React.Dispatch<
     React.SetStateAction<boolean>>>(() => {});
 
 export default function Body({children}: Readonly<{children: React.ReactNode}>) {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         loading? 
