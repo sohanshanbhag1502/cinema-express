@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { MovieCard, MovieProps } from "@/components/Cards";
 import { useSnackbar } from "notistack";
+import { context } from '@/components/Body';
 
 const Carousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,8 +82,10 @@ const Carousel = () => {
 export function Releases(){
     const [releases, setReleases] = useState<Array<MovieProps>>([]);
     const {enqueueSnackbar} = useSnackbar();
+    const setLoader = useContext(context);
 
     const fetchAllReleases = async ()=>{
+        setLoader(true);
         const res=await fetch('/api/fetch-releases', {
             method: 'POST',
             headers: {
@@ -96,6 +99,7 @@ export function Releases(){
             catch (e){
                 enqueueSnackbar("Sorry unable to reach the server at the moment.", 
                 {variant:"error"});
+                setLoader(false);
                 return
             }
             setReleases(data);
@@ -104,6 +108,7 @@ export function Releases(){
             enqueueSnackbar("Something went wrong while loading the page", 
                 {variant: 'error'});
         }
+        setLoader(false);
     }
 
     useEffect(()=>{ fetchAllReleases() },[]);

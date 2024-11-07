@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import prisma from "../../../../../prisma/client";
+import prisma from "@/prisma/client";
 import { tokenPayload, verify } from "@/lib/JWT";
 import { BookedSeat } from "@prisma/client";
 
@@ -94,7 +94,6 @@ export async function POST(req: NextRequest){
         });
     }
     catch(e){
-        console.log(e)
         return NextResponse.json({message:"Unable to connect to database"}, 
             {status:500})
     }

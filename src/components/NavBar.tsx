@@ -1,10 +1,11 @@
 "use client"
 
 import Link from "next/link";
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState, useContext } from "react";
 import DropDown from "@/components/DropDown";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 export function NavBar(){
     const [loggedIn, setLoggedIn] = useState(false);
@@ -12,6 +13,7 @@ export function NavBar(){
     const [search, setSearch] = useState("");
     const router = useRouter();
     const {enqueueSnackbar} = useSnackbar();
+    const setLoading = useContext(context);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>)=> {setSearch(e.target.value)}
     const handleEnter = (e:KeyboardEvent<HTMLInputElement>)=>{
@@ -21,6 +23,7 @@ export function NavBar(){
     }
 
     const checkLoggedIn = async () => {
+        setLoading(true);
         const res = await fetch('/api/auth/loggedIn', {
             method: "POST"
         });
@@ -30,6 +33,7 @@ export function NavBar(){
         catch (e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         if (res.status === 200){
@@ -40,6 +44,7 @@ export function NavBar(){
         else{
             setLoggedIn(false);
         }
+        setLoading(false);
     }
 
     useEffect(() => { checkLoggedIn() }, []);
@@ -91,8 +96,10 @@ export function NavBar(){
 export function AdminNavBar(){
     const [id, setId] = useState("");
     const {enqueueSnackbar} = useSnackbar();
+    const setLoading = useContext(context);
 
     const checkLoggedIn = async () => {
+        setLoading(true);
         const res = await fetch('/api/auth/loggedIn', {
             method: "POST"
         });
@@ -109,6 +116,7 @@ export function AdminNavBar(){
                 {variant:"success"});
             setId(id);
         }
+        setLoading(false);
     }
     useEffect(() => { checkLoggedIn() }, []);
 

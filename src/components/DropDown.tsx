@@ -1,16 +1,19 @@
 "use client"
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useContext} from "react"
 import { BiDownArrow } from "react-icons/bi";
 import { VscAccount } from "react-icons/vsc";
 import { useRouter } from "next/navigation";
+import { context } from "@/components/Body";
 
 export default function DropDown({userName, setLoggedIn}: 
     Readonly<{userName: string, setLoggedIn: React.Dispatch<React.SetStateAction<
         boolean>> | null}>){
     const [drop, setDrop] = useState(false)
-    const router = useRouter()
+    const router = useRouter();
+    const setLoading = useContext(context);
 
     const logOut = async () => {
+        setLoading(true);
         const res = await fetch(`/api/auth/logout`, {
             method: "POST"
         });
@@ -23,6 +26,7 @@ export default function DropDown({userName, setLoggedIn}:
                 router.push('/admin/login');
             }
         }
+        setLoading(false);
     }
 
     useEffect(()=>{
