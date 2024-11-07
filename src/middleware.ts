@@ -49,6 +49,6 @@ export async function middleware(req: NextRequest) {
     else if (path.startsWith('/admin') && !(path==='/admin/login')
         && !(path==='/admin/register')){
         return NextResponse.redirect(new URL('/admin/login', req.url));
-    }
+    }   
     return NextResponse.next();
 }

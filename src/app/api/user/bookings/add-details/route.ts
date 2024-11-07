@@ -65,7 +65,7 @@ export async function POST(req: NextRequest){
                 theId:theaterId,
                 screenId,
                 userId:token.userId,
-                showtime: time,
+                showtime: time.trim(),
                 bookdate: new Date(date),
                 seats:seats.reduce((acc:string, ele:string)=>acc+ele+", ", "").slice(0, -2)
             }
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest){
             seatCol: ele.split('-')[1],
             bookId: bookingId,
             screenId,
-            bookedTime: new Date(new Date(date).toISOString().split('T')[0]+"T"+time),
+            bookedTime: new Date(new Date(date).toISOString().split('T')[0]+"T"+time.trim()),
             theId: theaterId,
             movieId
         }});
@@ -94,6 +94,7 @@ export async function POST(req: NextRequest){
         });
     }
     catch(e){
+        console.log(e)
         return NextResponse.json({message:"Unable to connect to database"}, 
             {status:500})
     }

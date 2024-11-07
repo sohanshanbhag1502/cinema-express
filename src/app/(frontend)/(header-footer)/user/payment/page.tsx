@@ -31,14 +31,18 @@ export default function PaymentPage(){
     const date=params.get('date');
     const router=useRouter();
 
-    const seats=localStorage.getItem("seats");
-    const seatList:Array<string>=JSON.parse(seats?seats:"[]");
 
     const [movie, setMovie]=useState<Movie>();
     const [theater, setTheater]=useState<string>();
     const [method, setMethod]=useState<string>("UPI");
     const [cost, setCost]=useState<number>(0);
+    const [seats, setSeats]=useState<string>("");
     const methods=["UPI", "Credit Card", "Debit Card", "Net Banking"];
+    const seatList:Array<string>=JSON.parse(seats?seats:"[]");
+
+    useEffect(()=>{
+        setSeats(localStorage.getItem("seats")!);
+    }, [])
 
     const fetchDetails = async()=>{
         const res=await fetch('/api/movie-theater-details', {
@@ -65,6 +69,7 @@ export default function PaymentPage(){
             {variant:"error"});
             return
         }
+        console.log(data);
         setTheater(data.theater.name+", "+data.theater.address+", "+data.theater.city);
         setMovie(data.movie);
         setCost(data.cost);

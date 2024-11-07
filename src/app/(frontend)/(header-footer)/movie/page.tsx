@@ -35,7 +35,7 @@ export default function MoviePage(){
             })
         });
         try{
-            var message = await res.json();
+            var data = await res.json();
         }
         catch(e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
@@ -47,7 +47,6 @@ export default function MoviePage(){
             router.push('/');
             return;
         }
-        const data = await res.json();
         setMovieDetails(data.movie);
         setMovieGenres(data.genres);
         setMovieLangs(data.lang);

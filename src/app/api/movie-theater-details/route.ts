@@ -54,7 +54,7 @@ export async function POST(req: NextRequest){
             return NextResponse.json({message:"Unable to connect to database"}, 
                 {status:500})
         }
-        return NextResponse.json({movie, theater, costs}, 
+        return NextResponse.json({movie, theater, cost:costs}, 
             {status: 200});
     }
 

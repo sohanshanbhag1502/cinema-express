@@ -16,7 +16,7 @@ export async function POST(req: NextRequest){
         var bookedSeats = (await prisma.bookedSeat.findMany({
             where: {
                 movieId,
-                bookedTime:new Date(pdate+'T'+time),
+                bookedTime:new Date(pdate+'T'+time.trim()),
                 theId:theaterId
             }
         })).map((seat)=>seat.seatRow+'-'+seat.seatCol);
