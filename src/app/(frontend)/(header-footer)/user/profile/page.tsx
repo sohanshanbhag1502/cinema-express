@@ -1,12 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import type { MouseEvent, ChangeEvent } from "react";
 import Link from "next/link";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 export default function ProfilePage(){
     const { enqueueSnackbar } = useSnackbar();
+    const setLoading = useContext(context);
 
     const [name, setName] = useState("")
     const [phoneNo, setPhoneNo] = useState("")
@@ -37,6 +39,7 @@ export default function ProfilePage(){
 
     const postProfile = async (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
+        setLoading(true);
         const res=await fetch('/api/auth/user/update-profile', {
             method:"POST",
             headers:{"Content-Type":"application/json"},
@@ -56,14 +59,23 @@ export default function ProfilePage(){
             enqueueSnackbar("Something went wrong. Please try again.", 
                 {variant:"error"})
         }
+        setLoading(false);
     }
 
     const fetchProfile = async () => {
+        setLoading(true);
         const res=await fetch('/api/auth/user/fetch-profile', {
             method:"POST",
             headers:{"Content-Type":"application/json"}
         })
-        const data=await res.json();
+        try{
+            var data=await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Unable to reach the server.", {variant:"error"})
+            setLoading(false);
+            return;
+        }
         if (res.status===200){
             setUserName(data.userId)
             setName(data.name)
@@ -75,6 +87,7 @@ export default function ProfilePage(){
         else{
             enqueueSnackbar("Unable to retrive the profile.", {variant:"error"})
         }
+        setLoading(false);
     }
 
     useEffect(() => {fetchProfile()}, [])

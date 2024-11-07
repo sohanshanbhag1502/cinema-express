@@ -4,12 +4,13 @@ import { useSearchParams } from "next/navigation";
 import { FilterCard, MovieCard } from "@/components/Cards";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SwapVertIcon from '@mui/icons-material/SwapVert';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import type { MovieProps } from "@/components/Cards";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import FilterMenu from "@/components/FilterMenu";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 export interface Filters{
     genre:string | undefined | null,
@@ -23,7 +24,7 @@ export default function SearchPage(){
     const params=useSearchParams();
     const router=useRouter();
     const {enqueueSnackbar} = useSnackbar();
-
+    const setLoading = useContext(context);
 
     const [movies, setMovies]=useState<MovieProps[]>([]);
     const [sortOrder, setSortOrder]=useState("");
@@ -49,6 +50,7 @@ export default function SearchPage(){
         value={filters?.movieTitle}/>)
 
     const postSearch=async ()=>{
+        setLoading(true);
         const response=await fetch("/api/search",{
             method:"POST",
             body:JSON.stringify(filters),
@@ -63,9 +65,11 @@ export default function SearchPage(){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
             router.push('/');
+            setLoading(false);
             return;
         }
         setMovies(data);
+        setLoading(false);
     }
 
     useEffect(()=>{
@@ -97,12 +101,14 @@ export default function SearchPage(){
     },[filters]);
 
     const sortResults=()=>{
+        setLoading(true);
         if (sortOrder==="asc") setSortOrder("desc")
         else if (sortOrder==="" || sortOrder==="desc") setSortOrder("asc")
         setMovies([...movies].sort((a,b)=>{
             if(sortOrder==="asc") return a.title.localeCompare(b.title)
             else return b.title.localeCompare(a.title)
         }))
+        setLoading(false);
     }
 
     return (

@@ -2,12 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 import { Movie, Theater } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 interface Details{
     movie: Movie;
@@ -30,7 +31,7 @@ export default function PaymentPage(){
     const theaterId=params.get('theaterId');
     const date=params.get('date');
     const router=useRouter();
-
+    const setLoading=useContext(context);
 
     const [movie, setMovie]=useState<Movie>();
     const [theater, setTheater]=useState<string>();
@@ -45,6 +46,7 @@ export default function PaymentPage(){
     }, [])
 
     const fetchDetails = async()=>{
+        setLoading(true);
         const res=await fetch('/api/movie-theater-details', {
             method: 'POST',
             headers: {
@@ -59,6 +61,7 @@ export default function PaymentPage(){
         if (res.status!==200){
             enqueueSnackbar("Invalid Details Provided", {variant: 'error'});
             router.push('/');
+            setLoading(false);
             return;
         }
         try{
@@ -67,15 +70,17 @@ export default function PaymentPage(){
         catch (e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
-        console.log(data);
         setTheater(data.theater.name+", "+data.theater.address+", "+data.theater.city);
         setMovie(data.movie);
         setCost(data.cost);
+        setLoading(false);
     }
 
     const bookTicket = async ()=>{
+        setLoading(true);
         const res=await fetch('/api/user/bookings/add-details', {
             method: 'POST',
             headers: {
@@ -99,6 +104,7 @@ export default function PaymentPage(){
         else{
             enqueueSnackbar("Payment Failed", {variant: 'error'});
         }
+        setLoading(false);
     }
 
     useEffect(()=>{

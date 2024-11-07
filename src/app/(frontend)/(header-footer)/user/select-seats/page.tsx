@@ -4,8 +4,9 @@ import { useSearchParams } from "next/navigation";
 import { SeatLayout } from "@/components/SeatLayout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 export default function SelectSeats(){
     const params=useSearchParams();
@@ -20,7 +21,10 @@ export default function SelectSeats(){
     const [movie, setMovie] = useState("");
     const [bookedList, setBookedList] = useState<Array<string>>([]);
 
+    const setLoading=useContext(context);
+
     const fetchDetails = async()=>{
+        setLoading(true);
         const res=await fetch('/api/movie-theater-details', {
             method: 'POST',
             headers: {
@@ -42,13 +46,16 @@ export default function SelectSeats(){
         catch (e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         setTheater(data.theater.name+", "+data.theater.address+", "+data.theater.city);
         setMovie(data.movie.title);
+        setLoading(false);
     }
 
     const fetchBookedSeats = async()=>{
+        setLoading(true);
         const res=await fetch('/api/user/bookings/booked-seats', {
             method: 'POST',
             headers: {
@@ -64,6 +71,7 @@ export default function SelectSeats(){
         if (res.status!==200){
             enqueueSnackbar('Invalid Details Provided', {variant: 'error'});
             router.push('/');
+            setLoading(false);
             return;
         }
         try{
@@ -72,17 +80,18 @@ export default function SelectSeats(){
         catch (e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         setBookedList(data);
+        setLoading(false);
     }
 
     useEffect(()=>{
+        localStorage.clear();
         fetchDetails();
         fetchBookedSeats();
     },[]);
-
-    localStorage.clear();
 
     return (
         <div className="w-full p-10 flex flex-col content-center items-start">

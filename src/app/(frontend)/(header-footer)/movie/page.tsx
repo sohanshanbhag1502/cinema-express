@@ -9,22 +9,27 @@ import type { Cast, Movie } from '@prisma/client';
 import { CldImage } from 'next-cloudinary';
 import Link from 'next/link';
 import { useSnackbar } from 'notistack';
+import { useContext } from 'react';
+import { context } from '@/components/Body';
 
 export default function MoviePage(){
     const router=useRouter();
     const params=useSearchParams();
     const { enqueueSnackbar } = useSnackbar();
+    const {} = useContext(context);
 
     const [movieDetails, setMovieDetails]=useState<Movie>();
     const [movieLangs, setMovieLangs]=useState<Array<string>>();
     const [movieCasts, setMovieCasts]=useState<Array<Cast>>();
     const [movieGenres, setMovieGenres]=useState<Array<string>>();
     const [rating, setRating]=useState<number>(0);
+    const setLoading = useContext(context);
 
 
     const id=params.get('movieId');
 
     const fetchMovie=async()=>{
+        setLoading(true);
         const res=await fetch('/api/movie-details', {
             method: 'POST',
             headers: {
@@ -40,11 +45,13 @@ export default function MoviePage(){
         catch(e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         if (res.status!==200){
             enqueueSnackbar('Invalid Movie Id Provided', { variant: 'error' });
             router.push('/');
+            setLoading(false);
             return;
         }
         setMovieDetails(data.movie);
@@ -52,6 +59,7 @@ export default function MoviePage(){
         setMovieLangs(data.lang);
         setMovieCasts(data.casts);
         setRating(data.movie.rating);
+        setLoading(false);
     }
 
     useEffect(()=>{ fetchMovie() }, [id]);

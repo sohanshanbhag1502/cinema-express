@@ -1,9 +1,10 @@
 "use client"
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 interface BookingDetails{
     movieTitle: string;
@@ -17,6 +18,7 @@ interface BookingDetails{
 export default function BookingConfirmationPage(){
     const params=useSearchParams();
     const { enqueueSnackbar } = useSnackbar();
+    const setLoading = useContext(context);
 
     const [movieTitle, setMovieTitle]=useState<string>("");
     const [theater, setTheater]=useState<string>("");
@@ -29,6 +31,7 @@ export default function BookingConfirmationPage(){
     const router=useRouter();
 
     const fetchDetails = async()=>{
+        setLoading(true);
         const res=await fetch('/api/user/bookings/fetch-details', {
             method: 'POST',
             headers: {
@@ -41,6 +44,7 @@ export default function BookingConfirmationPage(){
         if (res.status!==200){
             enqueueSnackbar('Invalid Details Provided', { variant: 'error' });
             router.push('/');
+            setLoading(false);
             return;
         }
         try{
@@ -49,6 +53,7 @@ export default function BookingConfirmationPage(){
         catch (e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         setTheater(data.theater);
@@ -57,6 +62,7 @@ export default function BookingConfirmationPage(){
         setTime(data.time);
         setSeats(data.seats);
         setAmount(data.amount);
+        setLoading(false);
     }
 
     useEffect(()=>{

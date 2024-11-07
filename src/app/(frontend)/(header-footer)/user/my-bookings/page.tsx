@@ -2,8 +2,9 @@
 
 import { BookingCard } from "@/components/Cards";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useSnackbar } from "notistack";
+import { context } from "@/components/Body";
 
 interface BookingDetails{
     bookingId: string,
@@ -22,8 +23,10 @@ export default function MyBookings(){
     const [bookings, setBookings] = useState<Array<BookingDetails>>([]);
     const router = useRouter();
     const {enqueueSnackbar} = useSnackbar();
+    const setLoading = useContext(context);
 
     const fetchAllBookings = async ()=>{
+        setLoading(true);
         const res=await fetch('/api/user/bookings/all-bookings', {
             method: 'POST',
             headers: {
@@ -38,6 +41,7 @@ export default function MyBookings(){
                 {variant: 'error'});
             router.push('/');
         }
+        setLoading(false);
     }
 
     useEffect(()=>{ fetchAllBookings() }, [])

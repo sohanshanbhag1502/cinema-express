@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { HostMovie, Movie, Theater } from '@prisma/client';
 import { useSnackbar } from 'notistack';
+import { context } from '@/components/Body';
 
 const darkTheme = createTheme({
     palette: {
@@ -38,6 +39,7 @@ export default function BookTicketsPage(){
     const params=useSearchParams();
     const router=useRouter();
     const { enqueueSnackbar } = useSnackbar();
+    const setLoading = useContext(context);
     
     const cities=[
         "Bengaluru",
@@ -59,6 +61,7 @@ export default function BookTicketsPage(){
     const id=params.get('movieId')
 
     const fetchMovieTitle=async()=>{
+        setLoading(true);
         const res=await fetch('/api/movie-details', {
             method: 'POST',
             headers: {
@@ -74,17 +77,21 @@ export default function BookTicketsPage(){
         catch(e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         if (res.status!==200){
             enqueueSnackbar('Invalid Details Provided', { variant: 'error' });
             router.push('/');
+            setLoading(false);
             return;
         }
-        setMovie(data.movie)
+        setMovie(data.movie);
+        setLoading(false);
     }
 
     const fetchShows = async()=>{
+        setLoading(true);
         const res=await fetch('/api/fetch-shows', {
             method: 'POST',
             headers: {
@@ -102,11 +109,13 @@ export default function BookTicketsPage(){
         catch(e){
             enqueueSnackbar("Sorry unable to reach the server at the moment.", 
             {variant:"error"});
+            setLoading(false);
             return
         }
         if (res.status!==200){
             enqueueSnackbar("Something Went Wrong.", {variant:"error"});
             router.push('/');
+            setLoading(false);
             return;
         }
         const screens: Array<theaterShowTime> = []
@@ -125,6 +134,7 @@ export default function BookTicketsPage(){
             screens[index].showtimes.push(show.showtime)
         }
         setShows(screens);
+        setLoading(false);
     }
 
     useEffect(()=>{ fetchMovieTitle() }, [])
