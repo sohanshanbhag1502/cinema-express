@@ -28,7 +28,7 @@ export async function middleware(req: NextRequest) {
             }
             else if (payload.role === 'admin' && (path.startsWith('/user')
             || path.startsWith('/api/user'))){
-                return NextResponse.redirect(new URL('admin', req.url));
+                return NextResponse.redirect(new URL('/admin', req.url));
             }
             else if (payload.role === 'user' && (path.startsWith('/admin')
             || path.startsWith('/api/admin'))){
