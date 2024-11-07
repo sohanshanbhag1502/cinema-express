@@ -9,17 +9,28 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "User ID is required"}, {status: 400});
     }
 
-    const user = await prisma.user.findUnique({
-        where: {userId}
-    });
-
-    if (!user){
-        return NextResponse.json({message: "User not found"}, {status: 404});
+    try{
+        const user = await prisma.user.findUnique({
+            where: {userId}
+        });
+        if (!user){
+            return NextResponse.json({message: "User not found"}, {status: 404});
+        }
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
-    const bookings = await prisma.booking.findMany({
-        where: {userId}
-    });
+    try{
+        var bookings = await prisma.booking.findMany({
+            where: {userId}
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json(bookings, {status: 200});
 }

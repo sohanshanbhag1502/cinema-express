@@ -85,7 +85,14 @@ export default function AddMoviePage(){
                 casts:casts.split(", ")
             })
         });
-        const message=await res.json();
+        try{
+            var message = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status===200){
             enqueueSnackbar("Added the Movie successfully", {variant: 'success'});
         }

@@ -13,14 +13,19 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
-    const admin = await prisma.admin.findUnique({
-        where: {
-            adminId: validation.data.adminId
+    try{
+        var admin = await prisma.admin.findUnique({
+            where: {
+                adminId: validation.data.adminId
+            }
+        });
+        if (!admin){
+            return NextResponse.json({message: "Admin not Registered"}, {status: 404});
         }
-    });
-
-    if (!admin){
-        return NextResponse.json({message: "Admin not Registered"}, {status: 404});
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     const {adminId, passwd} = admin;

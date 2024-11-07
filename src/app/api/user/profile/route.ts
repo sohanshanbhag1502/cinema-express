@@ -9,12 +9,18 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "User ID is required"}, {status: 400});
     }
 
-    const user = await prisma.user.findUnique({
-        where: {userId}
-    });
+    try{
+        var user = await prisma.user.findUnique({
+            where: {userId}
+        });
 
-    if (!user){
-        return NextResponse.json({message: "User not found"}, {status: 404});
+        if (!user){
+            return NextResponse.json({message: "User not found"}, {status: 404});
+        }
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     return NextResponse.json(user, {status: 200});

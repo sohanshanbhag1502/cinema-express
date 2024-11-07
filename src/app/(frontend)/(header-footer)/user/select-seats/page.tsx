@@ -36,7 +36,14 @@ export default function SelectSeats(){
             router.push('/');
             return;
         }
-        const data = await res.json();
+        try{
+            var data = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         setTheater(data.theater.name+", "+data.theater.address+", "+data.theater.city);
         setMovie(data.movie.title);
     }
@@ -59,7 +66,14 @@ export default function SelectSeats(){
             router.push('/');
             return;
         }
-        const data = await res.json();
+        try{
+            var data : string[] = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         setBookedList(data);
     }
 

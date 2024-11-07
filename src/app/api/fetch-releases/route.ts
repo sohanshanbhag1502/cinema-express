@@ -6,18 +6,24 @@ import { MovieProps } from "@/components/Cards";
 
 export async function POST(req: NextRequest){
 
-    const movies = await prisma.movie.findMany({
-        where: {
-            pubYear: new Date().getFullYear()
-        }
-    });
-    const movieGenres = await prisma.movieGenre.findMany({
-        where: {
-            movieId: {
-                in: movies.map(movie => movie.movieId)
+    try{
+        var movies = await prisma.movie.findMany({
+            where: {
+                pubYear: new Date().getFullYear()
             }
-        }
-    });
+        });
+        var movieGenres = await prisma.movieGenre.findMany({
+            where: {
+                movieId: {
+                    in: movies.map(movie => movie.movieId)
+                }
+            }
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     const movieGenresMap = movieGenres.reduce((acc: Map<string, Array<string>>, 
         movieGenre: MovieGenre) => {

@@ -68,12 +68,19 @@ export default function BookTicketsPage(){
                 movieId: id
             })
         });
+        try{
+            var data = await res.json();
+        }
+        catch(e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status!==200){
             enqueueSnackbar('Invalid Details Provided', { variant: 'error' });
             router.push('/');
             return;
         }
-        const data = await res.json();
         setMovie(data.movie)
     }
 
@@ -88,11 +95,20 @@ export default function BookTicketsPage(){
                 city
             })
         });
+        try{
+            var data: fetchVal = await res.json();
+        }
+        
+        catch(e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status!==200){
+            enqueueSnackbar("Something Went Wrong.", {variant:"error"});
             router.push('/');
             return;
         }
-        const data: fetchVal = await res.json();
         const screens: Array<theaterShowTime> = []
         for (var theater of data.theaters){
             screens.push({

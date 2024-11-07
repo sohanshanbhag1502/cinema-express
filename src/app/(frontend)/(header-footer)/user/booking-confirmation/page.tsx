@@ -43,7 +43,14 @@ export default function BookingConfirmationPage(){
             router.push('/');
             return;
         }
-        const data : BookingDetails = await res.json();
+        try{
+            var data : BookingDetails = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         setTheater(data.theater);
         setMovieTitle(data.movieTitle);
         setDate(new Date(data.date).toDateString());

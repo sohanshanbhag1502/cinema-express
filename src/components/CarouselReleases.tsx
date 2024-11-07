@@ -90,7 +90,14 @@ export function Releases(){
             }
         });
         if (res.status===200){
-            const data:MovieProps[]=await res.json();
+            try{
+                var data : MovieProps[] = await res.json();
+            }
+            catch (e){
+                enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+                {variant:"error"});
+                return
+            }
             setReleases(data);
         }
         else{

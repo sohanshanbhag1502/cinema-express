@@ -4,12 +4,14 @@ import Link from "next/link";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import DropDown from "@/components/DropDown";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 
 export function NavBar(){
     const [loggedIn, setLoggedIn] = useState(false);
     const [id, setId] = useState("");
     const [search, setSearch] = useState("");
     const router = useRouter();
+    const {enqueueSnackbar} = useSnackbar();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>)=> {setSearch(e.target.value)}
     const handleEnter = (e:KeyboardEvent<HTMLInputElement>)=>{
@@ -22,8 +24,16 @@ export function NavBar(){
         const res = await fetch('/api/auth/loggedIn', {
             method: "POST"
         });
-        const {id} = await res.json();
+        try{
+            var {id} = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status === 200){
+            enqueueSnackbar(`Logged in as ${id} successfully.`, {variant:"success"});
             setId(id);
             setLoggedIn(true);
         }
@@ -80,13 +90,23 @@ export function NavBar(){
 
 export function AdminNavBar(){
     const [id, setId] = useState("");
+    const {enqueueSnackbar} = useSnackbar();
 
     const checkLoggedIn = async () => {
         const res = await fetch('/api/auth/loggedIn', {
             method: "POST"
         });
-        const {id} = await res.json();
+        try{
+            var {id} = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status === 200){
+            enqueueSnackbar(`Logged in as ${id} (Admin) successfully.`, 
+                {variant:"success"});
             setId(id);
         }
     }

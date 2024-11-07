@@ -9,6 +9,7 @@ import type { MovieProps } from "@/components/Cards";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import FilterMenu from "@/components/FilterMenu";
 import { useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 
 export interface Filters{
     genre:string | undefined | null,
@@ -20,6 +21,10 @@ export interface Filters{
 
 export default function SearchPage(){
     const params=useSearchParams();
+    const router=useRouter();
+    const {enqueueSnackbar} = useSnackbar();
+
+
     const [movies, setMovies]=useState<MovieProps[]>([]);
     const [sortOrder, setSortOrder]=useState("");
     const [showMenu, setShowMenu]=useState<boolean>(false);
@@ -30,7 +35,6 @@ export default function SearchPage(){
         ageRating:params.get("ageRating"),
         movieTitle:params.get("movieTitle")
     });
-    const router=useRouter();
 
     const filterCards=[];
     if(filters?.genre) filterCards.push(<FilterCard type="genre" 
@@ -52,7 +56,15 @@ export default function SearchPage(){
                 "Content-Type":"application/json"
             }
         })
-        const data:MovieProps[]=await response.json();
+        try{
+            var data:MovieProps[]=await response.json();
+        }
+        catch(e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            router.push('/');
+            return;
+        }
         setMovies(data);
     }
 

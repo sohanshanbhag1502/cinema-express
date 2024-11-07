@@ -24,40 +24,46 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Invalid request body"}, {status: 400});
     }
 
-    const bookings = await prisma.booking.findMany({
-        where: {
-            userId
-        }
-    });
-    const theaters = await prisma.theater.findMany(
-        {
+    try{
+        var bookings = await prisma.booking.findMany({
             where: {
-                theId: {
-                    in: bookings.map((booking)=>booking.theId)
-                }
-            },
-            select: {
-                theId: true,
-                name: true,
-                city: true,
-                address: true
+                userId
             }
-        }
-    );
-    const movies = await prisma.movie.findMany(
-        {
-            where: {
-                movieId: {
-                    in: bookings.map((booking)=>booking.movieId)
+        });
+        var theaters = await prisma.theater.findMany(
+            {
+                where: {
+                    theId: {
+                        in: bookings.map((booking)=>booking.theId)
+                    }
+                },
+                select: {
+                    theId: true,
+                    name: true,
+                    city: true,
+                    address: true
                 }
-            },
-            select: {
-                movieId: true,
-                title: true,
-                pubYear: true
             }
-        }
-    );
+        );
+        var movies = await prisma.movie.findMany(
+            {
+                where: {
+                    movieId: {
+                        in: bookings.map((booking)=>booking.movieId)
+                    }
+                },
+                select: {
+                    movieId: true,
+                    title: true,
+                    pubYear: true
+                }
+            }
+        );
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     var retBody: Array<BookingDetails> = [];
     for (let ind in bookings){

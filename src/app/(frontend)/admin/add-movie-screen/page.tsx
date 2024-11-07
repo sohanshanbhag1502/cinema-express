@@ -48,7 +48,14 @@ export default function AddScreenPage(){
                 showtime
             })
         });
-        const message=await res.json();
+        try{
+            var message = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status===200){
             enqueueSnackbar("Added the movie to the screen successfully", 
                 {variant: 'success'});

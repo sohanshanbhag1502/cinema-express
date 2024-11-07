@@ -11,18 +11,31 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
-    const theater = await prisma.theater.findUnique({
-        where: {
-            theId: validation.data.theId
+    try{
+        const theater = await prisma.theater.findUnique({
+            where: {
+                theId: validation.data.theId
+            }
+        });
+        if (!theater){
+            return NextResponse.json({message: "Theater does not exist"}, {status: 404});
         }
-    });
-    if (!theater){
-        return NextResponse.json({message: "Theater does not exist"}, {status: 404});
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
-    await prisma.screen.create({
-        data: validation.data
-    });
+    try{
+        await prisma.screen.create({
+            data: validation.data
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
-    return NextResponse.json("Added movie to the screen successfully", {status: 200});
+    return NextResponse.json({message:"Added movie to the screen successfully"}, 
+        {status: 200});
 }

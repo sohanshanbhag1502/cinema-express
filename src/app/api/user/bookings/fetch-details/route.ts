@@ -11,25 +11,31 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Invalid request body"}, {status: 400});
     }
 
-    const [booking, payment] = await Promise.all([prisma.booking.findUnique({
-        where: {
-            bookId: bookingId
-        }
-    }), prisma.payment.findFirst({
-        where: {
-            bookId: bookingId
-        }
-    })]);
-    const theater = await prisma.theater.findUnique({
-        where: {
-            theId: booking?.theId
-        }
-    });
-    const movie = await prisma.movie.findUnique({
-        where: {
-            movieId: booking?.movieId
-        }
-    });
+    try{
+        var [booking, payment] = await Promise.all([prisma.booking.findUnique({
+            where: {
+                bookId: bookingId
+            }
+        }), prisma.payment.findFirst({
+            where: {
+                bookId: bookingId
+            }
+        })]);
+        var theater = await prisma.theater.findUnique({
+            where: {
+                theId: booking?.theId
+            }
+        });
+        var movie = await prisma.movie.findUnique({
+            where: {
+                movieId: booking?.movieId
+            }
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json({
         theater: theater?.name,

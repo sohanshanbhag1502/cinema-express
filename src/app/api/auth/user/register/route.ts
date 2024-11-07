@@ -12,13 +12,29 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
-    const user = await prisma.user.findUnique({
-        where: {
-            userId: validation.data.userId
+    try{
+        var user = await prisma.user.findUnique({
+            where: {
+                userId: validation.data.userId
+            }
+        });
+        if(user){
+            return NextResponse.json({message: "User already exists"}, 
+                {status: 409});
         }
-    });
-    if(user){
-        return NextResponse.json({message: "User already exists"}, {status: 409});
+        user = await prisma.user.findFirst({
+            where: {
+                email: validation.data.email
+            }
+        });
+        if(user){
+            return NextResponse.json({message: "User already exists"}, 
+                {status: 409});
+        }
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     validation.data.passwd = await bcrypt.hash(validation.data.passwd, 10);

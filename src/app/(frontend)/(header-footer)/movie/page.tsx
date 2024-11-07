@@ -34,6 +34,14 @@ export default function MoviePage(){
                 movieId: id
             })
         });
+        try{
+            var message = await res.json();
+        }
+        catch(e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         if (res.status!==200){
             enqueueSnackbar('Invalid Movie Id Provided', { variant: 'error' });
             router.push('/');

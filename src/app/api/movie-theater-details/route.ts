@@ -12,37 +12,49 @@ export async function POST(req: NextRequest){
             {status: 400});
     }
 
-    const movie = await prisma.movie.findUnique({
-        where: {
-            movieId
-        }
-    });
+    try{
+        var movie = await prisma.movie.findUnique({
+            where: {
+                movieId
+            }
+        });
 
-    if (!movie){
-        return NextResponse.json({message: "Movie not found"}, {status: 404});
+        if (!movie){
+            return NextResponse.json({message: "Movie not found"}, {status: 404});
+        }
+
+        var theater = await prisma.theater.findUnique({
+            where: {
+                theId: theaterId
+            }
+        });
+
+        if (!theater){
+            return NextResponse.json({message: "Theater not found"}, {status: 404});
+        }
     }
-
-    const theater = await prisma.theater.findUnique({
-        where: {
-            theId: theaterId
-        }
-    });
-
-    if (!theater){
-        return NextResponse.json({message: "Theater not found"}, {status: 404});
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     if (cost){
-        const cost=(await prisma.hostMovie.findFirst({
-            where: {
-                movieId,
-                theId: theaterId
-            },
-            select: {
-                cost: true
-            }
-        }))?.cost;
-        return NextResponse.json({movie, theater, cost}, 
+        try{
+            var costs=(await prisma.hostMovie.findFirst({
+                where: {
+                    movieId,
+                    theId: theaterId
+                },
+                select: {
+                    cost: true
+                }
+            }))?.cost;
+        }
+        catch(e){
+            return NextResponse.json({message:"Unable to connect to database"}, 
+                {status:500})
+        }
+        return NextResponse.json({movie, theater, costs}, 
             {status: 200});
     }
 

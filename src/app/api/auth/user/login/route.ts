@@ -13,14 +13,19 @@ export async function POST(req: NextRequest){
         return NextResponse.json({error:validation.error.errors}, {status: 400});
     }
 
-    const user = await prisma.user.findUnique({
-        where: {
-            userId: validation.data.userId
+    try{
+        var user = await prisma.user.findUnique({
+            where: {
+                userId: validation.data.userId
+            }
+        });
+        if (!user){
+            return NextResponse.json({message: "User not Registered"}, {status: 404});
         }
-    });
-
-    if (!user){
-        return NextResponse.json({message: "User not Registered"}, {status: 404});
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     const {userId, passwd} = user;

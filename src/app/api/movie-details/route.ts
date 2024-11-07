@@ -10,38 +10,44 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Movie ID is required"}, {status: 400});
     }
 
-    const movie = await prisma.movie.findUnique({
-        where: {
-            movieId
-        }
-    });
-
-    if (!movie){
-        return NextResponse.json({message: "Movie not found"}, {status: 404});
-    }
-
-    const movieLangs = (await prisma.movieLang.findMany({
-        where: {
-            movieId
-        }
-    })).map((movie) => movie.lang);
-    const movieGenres = (await prisma.movieGenre.findMany({
-        where: {
-            movieId
-        }
-    })).map((movie) => movie.genreName);
-    const movieCastIds = (await prisma.movieCast.findMany({
-        where: {
-            movieId
-        }
-    })).map((movie) => movie.castId);
-    const movieCasts = await prisma.cast.findMany({
-        where: {
-            castId: {
-                in: movieCastIds
+    try{
+        var movie = await prisma.movie.findUnique({
+            where: {
+                movieId
             }
+        });
+
+        if (!movie){
+            return NextResponse.json({message: "Movie not found"}, {status: 404});
         }
-    });
+
+        var movieLangs = (await prisma.movieLang.findMany({
+            where: {
+                movieId
+            }
+        })).map((movie) => movie.lang);
+        var movieGenres = (await prisma.movieGenre.findMany({
+            where: {
+                movieId
+            }
+        })).map((movie) => movie.genreName);
+        var movieCastIds = (await prisma.movieCast.findMany({
+            where: {
+                movieId
+            }
+        })).map((movie) => movie.castId);
+        var movieCasts = await prisma.cast.findMany({
+            where: {
+                castId: {
+                    in: movieCastIds
+                }
+            }
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json({movie, lang:movieLangs, casts:movieCasts,
         genres:movieGenres}, {status: 200});

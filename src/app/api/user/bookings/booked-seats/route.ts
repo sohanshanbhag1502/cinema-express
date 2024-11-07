@@ -12,13 +12,19 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Invalid request body"}, {status: 400});
     }
 
-    const bookedSeats = (await prisma.bookedSeat.findMany({
-        where: {
-            movieId,
-            bookedTime:new Date(pdate+'T'+time),
-            theId:theaterId
-        }
-    })).map((seat)=>seat.seatRow+'-'+seat.seatCol);
+    try{
+        var bookedSeats = (await prisma.bookedSeat.findMany({
+            where: {
+                movieId,
+                bookedTime:new Date(pdate+'T'+time),
+                theId:theaterId
+            }
+        })).map((seat)=>seat.seatRow+'-'+seat.seatCol);
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json(bookedSeats, {status: 200});
 }

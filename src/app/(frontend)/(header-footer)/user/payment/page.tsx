@@ -57,7 +57,14 @@ export default function PaymentPage(){
             router.push('/');
             return;
         }
-        const data : Details = await res.json();
+        try{
+            var data : Details = await res.json();
+        }
+        catch (e){
+            enqueueSnackbar("Sorry unable to reach the server at the moment.", 
+            {variant:"error"});
+            return
+        }
         setTheater(data.theater.name+", "+data.theater.address+", "+data.theater.city);
         setMovie(data.movie);
         setCost(data.cost);

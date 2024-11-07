@@ -17,17 +17,37 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Invalid request body"}, {status: 400});
     }
 
-    const bookingCount = await prisma.booking.count()+1;
-    const bookingId = "B"+bookingCount.toString().padStart(4, '0');
+    try{
+        const bookingCount = await prisma.booking.count()+1;
+        var bookingId = "B"+bookingCount.toString().padStart(4, '0');
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
-    const tranId=Math.floor(100000000 + Math.random() * 900000000);
+    try{
+        var tranId=Math.floor(100000000 + Math.random() * 900000000);
 
-    const screenId = (await prisma.hostMovie.findFirst({
-        where: {
-            theId:theaterId,
-            movieId:movieId
+        while ((await prisma.payment.findUnique({
+            where: {
+                tranId
+            }
+        }))){
+            tranId=Math.floor(100000000 + Math.random() * 900000000);
         }
-    }))?.screenId;
+
+        var screenId = (await prisma.hostMovie.findFirst({
+            where: {
+                theId:theaterId,
+                movieId:movieId
+            }
+        }))?.screenId;
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     if (!screenId){
         return NextResponse.json({message: "Something went wrong"}, {status: 400});
@@ -37,40 +57,46 @@ export async function POST(req: NextRequest){
         return NextResponse.json({message: "Unauthorized"}, {status: 401});
     }
 
-    await prisma.booking.create({
-        data: {
+    try{
+        await prisma.booking.create({
+            data: {
+                bookId: bookingId,
+                movieId,
+                theId:theaterId,
+                screenId,
+                userId:token.userId,
+                showtime: time,
+                bookdate: new Date(date),
+                seats:seats.reduce((acc:string, ele:string)=>acc+ele+", ", "").slice(0, -2)
+            }
+        });
+
+        const writeData: Array<BookedSeat> = seats.map((ele:string)=>{return {
+            seatRow: ele.split('-')[0],
+            seatCol: ele.split('-')[1],
             bookId: bookingId,
-            movieId,
-            theId:theaterId,
             screenId,
-            userId:token.userId,
-            showtime: time,
-            bookdate: new Date(date),
-            seats:seats.reduce((acc:string, ele:string)=>acc+ele+", ", "").slice(0, -2)
-        }
-    });
+            bookedTime: new Date(new Date(date).toISOString().split('T')[0]+"T"+time),
+            theId: theaterId,
+            movieId
+        }});
+        await prisma.bookedSeat.createMany({
+            data: writeData
+        });
 
-    const writeData: Array<BookedSeat> = seats.map((ele:string)=>{return {
-        seatRow: ele.split('-')[0],
-        seatCol: ele.split('-')[1],
-        bookId: bookingId,
-        screenId,
-        bookedTime: new Date(new Date(date).toISOString().split('T')[0]+"T"+time),
-        theId: theaterId,
-        movieId
-    }});
-    await prisma.bookedSeat.createMany({
-        data: writeData
-    });
-
-    await prisma.payment.create({
-        data: {
-            amount,
-            method,
-            tranId,
-            bookId:bookingId
-        }
-    });
+        await prisma.payment.create({
+            data: {
+                amount,
+                method,
+                tranId,
+                bookId:bookingId
+            }
+        });
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json({bookingId}, {status: 200});
 }

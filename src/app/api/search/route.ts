@@ -18,50 +18,56 @@ export async function POST(req: NextRequest){
     var retRes: Map<string, MovieProps>=new Map();
     var searchRes: Array<MovieProps>=[];
 
-    if (movieTitle) {
-        res1 = (await prisma.movie.findMany({
-            where: {
-                title: {
-                    contains: movieTitle.trim(),
-                    mode: 'insensitive'
+    try{
+        if (movieTitle) {
+            res1 = (await prisma.movie.findMany({
+                where: {
+                    title: {
+                        contains: movieTitle.trim(),
+                        mode: 'insensitive'
+                    }
                 }
-            }
-        })).map((movie: Movie) => movie.movieId);
-    }
-    if (city) {
-        res2 = (await prisma.theater.findMany({
-            where: {
-                city
-            }
-        })).map((theater: Theater) => theater.theId);
-        res2 = (await prisma.hostMovie.findMany({
-            where: {
-                theId: {
-                    in: res2
+            })).map((movie: Movie) => movie.movieId);
+        }
+        if (city) {
+            res2 = (await prisma.theater.findMany({
+                where: {
+                    city
                 }
-            }
-        })).map((hostMovie:HostMovie) => hostMovie.movieId);
+            })).map((theater: Theater) => theater.theId);
+            res2 = (await prisma.hostMovie.findMany({
+                where: {
+                    theId: {
+                        in: res2
+                    }
+                }
+            })).map((hostMovie:HostMovie) => hostMovie.movieId);
+        }
+        if (genre) {
+            res3 = (await prisma.movieGenre.findMany({
+                where: {
+                    genreName:genre
+                }
+            })).map((movie:MovieGenre) => movie.movieId);
+        }
+        if (ageRating) {
+            res4 = (await prisma.movie.findMany({
+                where: {
+                    ageRating
+                }
+            })).map((movie:Movie) => movie.movieId);
+        }
+        if (language) {
+            res5 = (await prisma.movieLang.findMany({
+                where: {
+                    lang:language
+                }
+            })).map((movie:MovieLang) => movie.movieId);
+        }
     }
-    if (genre) {
-        res3 = (await prisma.movieGenre.findMany({
-            where: {
-                genreName:genre
-            }
-        })).map((movie:MovieGenre) => movie.movieId);
-    }
-    if (ageRating) {
-        res4 = (await prisma.movie.findMany({
-            where: {
-                ageRating
-            }
-        })).map((movie:Movie) => movie.movieId);
-    }
-    if (language) {
-        res5 = (await prisma.movieLang.findMany({
-            where: {
-                lang:language
-            }
-        })).map((movie:MovieLang) => movie.movieId);
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
     }
 
     if (!movieTitle){

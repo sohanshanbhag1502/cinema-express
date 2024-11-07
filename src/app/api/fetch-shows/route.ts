@@ -6,46 +6,52 @@ export async function POST(req: NextRequest){
     const body = await req.json();
     const {movieId, city} = body;
 
-    if (!movieId){
-        return NextResponse.json({message: "Movie ID is required"}, {status: 400});
+    if (!movieId && !city){
+        return NextResponse.json({message: "Invalid Request Body"}, {status: 400});
     }
 
-    const movie = await prisma.movie.findUnique({
-        where: {
-            movieId
-        }
-    });
-
-    if (!movie){
-        return NextResponse.json({message: "Movie not found"}, {status: 404});
-    }
-
-    var theaters = (await prisma.theater.findMany({
-        where : {
-            city
-        }
-    }))
-
-    var theaterIds=theaters.map((val)=>val.theId)
-
-    const shows = await prisma.hostMovie.findMany({
-        where: {
-            theId : {
-                in: theaterIds
-            },
-            movieId
-        }
-    })
-
-    theaterIds=shows.map((val)=>val.theId)
-
-    theaters=await prisma.theater.findMany({
-        where: {
-            theId : {
-                in: theaterIds
+    try{
+        const movie = await prisma.movie.findUnique({
+            where: {
+                movieId
             }
+        });
+
+        if (!movie){
+            return NextResponse.json({message: "Movie not found"}, {status: 404});
         }
-    })
+
+        var theaters = (await prisma.theater.findMany({
+            where : {
+                city
+            }
+        }))
+
+        var theaterIds=theaters.map((val)=>val.theId)
+
+        var shows = await prisma.hostMovie.findMany({
+            where: {
+                theId : {
+                    in: theaterIds
+                },
+                movieId
+            }
+        })
+
+        theaterIds=shows.map((val)=>val.theId)
+
+        theaters=await prisma.theater.findMany({
+            where: {
+                theId : {
+                    in: theaterIds
+                }
+            }
+        })
+    }
+    catch(e){
+        return NextResponse.json({message:"Unable to connect to database"}, 
+            {status:500})
+    }
 
     return NextResponse.json({shows, theaters}, {status: 200});
 }
