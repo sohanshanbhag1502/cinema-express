@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from '@next/third-parties/google';
 import "@/app/globals.css";
 import Body from "@/components/Body";
 
@@ -19,6 +20,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
                     {children}
                 </Body>
             </body>
+            <GoogleAnalytics gaId={process.env.GAID!} />
         </html>
     );
 }
