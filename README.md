@@ -4,7 +4,7 @@
 - [Next.js](https://nextjs.org/): Full stack framework
 - [Neon DB](https://neon.tech/): SQL Database Cluster Provider
 - [Prisma](https://prisma.io): ORM For SQL Database Schema Migration and Interaction
-- [Cloudinary](https://cloudinary.com/): Cloud Storage Provider for Providing Images
+- [Cloudinary](https://cloudinary.com/): Cloud Storage Provider for Storing Images
 - [Vercel](https://vercel.com/): Website Hosting Platform
 - [Google Analytics](https://analytics.google.com/): To measure the number of users visiting the website
 
