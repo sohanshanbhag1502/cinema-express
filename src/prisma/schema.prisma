@@ -80,21 +80,22 @@ model Screen {
 }
 
 model BookedSeat {
-  seatRow    String   @db.Char(1)
-  seatCol    String   @db.Char(2)
-  theId      String   @map("the_id") @db.Char(5)
-  movieId    String   @map("movie_id") @db.Char(5)
-  bookId     String   @map("book_id") @db.Char(5)
-  screenId   String   @db.Char(5)
-  bookedTime DateTime @db.Timestamp
-  theater    Theater  @relation(fields: [theId], references: [theId])
-  movie      Movie    @relation(fields: [movieId], references: [movieId])
-  booking    Booking  @relation(fields: [bookId], references: [bookId])
-  Screen     Screen   @relation(fields: [screenId], references: [screenId])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  seatRow     String   @db.Char(1)
+  seatCol     String   @db.Char(2)
+  theId       String   @map("the_id") @db.Char(5)
+  movieId     String   @map("movie_id") @db.Char(5)
+  bookId      String   @map("book_id") @db.Char(5)
+  screenId    String   @db.Char(5)
+  bookingDate String   @db.Char(20)
+  bookingTime String   @db.Char(5)
+  theater     Theater  @relation(fields: [theId], references: [theId])
+  movie       Movie    @relation(fields: [movieId], references: [movieId])
+  booking     Booking  @relation(fields: [bookId], references: [bookId])
+  Screen      Screen   @relation(fields: [screenId], references: [screenId])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@id([seatRow, seatCol, theId, movieId, bookedTime])
+  @@id([seatRow, seatCol, theId, movieId, bookingTime, bookingDate])
 }
 
 model Payment {
@@ -127,8 +128,8 @@ model Booking {
   movieId    String       @map("movie_id") @db.Char(5)
   theId      String       @map("the_id") @db.Char(5)
   userId     String       @map("user_id") @db.VarChar(255)
-  showtime   String       @db.Char(8)
-  bookdate   DateTime     @db.Date
+  showtime   String       @db.Char(5)
+  bookdate   String       @db.Char(20)
   seats      String       @db.Text
   movie      Movie        @relation(fields: [movieId], references: [movieId])
   theater    Theater      @relation(fields: [theId], references: [theId])

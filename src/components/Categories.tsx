@@ -63,8 +63,8 @@ export function TheaterDisplay(props:TheaterProps){
         <div className="w-full flex-col items-start content-center mt-5">
             <h1 className="text-lg font-semibold">{props.name}, {props.address}</h1>
             <div className="w-full flex flex-wrap">
-                {props.showtimes.map((ele, ind)=><ShowTimeCard time={ele} key={ind.toString()}
-                movieId={props.movieId} theaterId={props.theaterId} 
+                {props.showtimes.map((ele, ind)=><ShowTimeCard time={ele.trim()} 
+                key={ind.toString()} movieId={props.movieId} theaterId={props.theaterId} 
                 date={props.date}/>)}
             </div>
         </div>

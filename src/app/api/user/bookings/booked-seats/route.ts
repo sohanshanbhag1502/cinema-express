@@ -6,7 +6,6 @@ export async function POST(req: NextRequest){
     const body = await req.json();
 
     const { movieId, date, time, theaterId } = body;
-    var pdate = (new Date(date)).toISOString().split('T')[0];
 
     if (!movieId || !theaterId || !date || !time){ 
         return NextResponse.json({message: "Invalid request body"}, {status: 400});
@@ -16,10 +15,11 @@ export async function POST(req: NextRequest){
         var bookedSeats = (await prisma.bookedSeat.findMany({
             where: {
                 movieId,
-                bookedTime:new Date(pdate+'T'+time.trim()),
+                bookingDate: date.trim(),
+                bookingTime: time.trim(),
                 theId:theaterId
             }
-        })).map((seat)=>seat.seatRow+'-'+seat.seatCol);
+        })).map((seat)=>seat.seatRow.trim()+'-'+seat.seatCol.trim());
     }
     catch(e){
         return NextResponse.json({message:"Unable to connect to database"}, 

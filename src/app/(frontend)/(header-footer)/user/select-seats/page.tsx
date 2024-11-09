@@ -64,8 +64,8 @@ export default function SelectSeats(){
             body: JSON.stringify({
                 movieId,
                 theaterId,
-                time,
-                date
+                time:time?.trim(),
+                date:date?.trim()
             })
         });
         if (res.status!==200){

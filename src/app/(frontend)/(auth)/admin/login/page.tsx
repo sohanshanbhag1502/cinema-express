@@ -26,7 +26,6 @@ function Loginpage() {
             return
         }
         if (res.status===200){
-            enqueueSnackbar("Logged in Successfully", {variant:"success"})
             router.push('/admin')
         }
         else if (message.error && message.error.length>0){

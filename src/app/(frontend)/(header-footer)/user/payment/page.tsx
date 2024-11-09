@@ -89,8 +89,8 @@ export default function PaymentPage(){
             body: JSON.stringify({
                 movieId,
                 theaterId,
-                date,
-                time,
+                time:time?.trim(),
+                date:date?.trim(),
                 seats: seatList,
                 amount,
                 method
@@ -100,6 +100,7 @@ export default function PaymentPage(){
         if (res.status===200){
             localStorage.removeItem("seats");
             router.push(`/user/booking-confirmation?bookingId=${bookingId}`);
+            enqueueSnackbar("Payment Successful", {variant: 'success'});
         }
         else{
             enqueueSnackbar("Payment Failed", {variant: 'error'});

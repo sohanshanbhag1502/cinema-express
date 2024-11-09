@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cinema Express: A Movie Ticket Booking and Management Website
+
+## Tech Stack Used:
+- [Next.js](https://nextjs.org/): Full stack framework
+- [Neon DB](https://neon.tech/): SQL Database Cluster Provider
+- [Prisma](https://prisma.io): ORM For SQL Database Schema Migration and Interaction
+- [Cloudinary](https://cloudinary.com/): Cloud Storage Provider for Providing Images
+- [Vercel](https://vercel.com/): Website Hosting Platform
 
 ## Getting Started
+- Create a free account in Neon DB and copy the Database cluster url (pooled connection url).
+- Create a free account in Cloudinary and create two upload presets (poster and cast photo)
+- Create a .env file and add the following parameters:
+```
+DATABASE_URL: Neon DB pooled cluster url
+JWT_SECRET: JWT secret key
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: Cloudinary Cloud Name
+NEXT_PUBLIC_CLOUDINARY_API_KEY: Cloudinary Cloud API Key
+CLOUDINARY_API_SECRET: Cloudinary Cloud API Secret
+CLOUDINARY_POSTER_PRESET: Cloudinary Cloud Poster Preset Name
+CLOUDINARY_PHOTO_PRESET: Cloudinary Cloud Photo Preset Name
+```
 
-First, run the development server:
+Install the required npm modules
+```
+npm install
+```
 
-```bash
+Migrate Database to schema (Only for first time)
+```
+npx prisma migrate dev
+```
+
+Generate prisma client
+```
+npx prisma generate
+```
+
+Start the development server:
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To build into production
+```
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To Deploy to production in vercel refer [Next.js deployment documentation](https://nextjs.org/docs/deployment)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Contributors:
+Sohan Shanbhag: [Github Link](https://github.com/sohanshanbhag1502)
+Shrujan V: [Github Link](https://github.com/Shrujan-V)
