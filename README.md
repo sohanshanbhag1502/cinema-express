@@ -56,4 +56,5 @@ To Deploy to production in vercel refer [Next.js deployment documentation](https
 
 ## Contributors:
 Sohan Shanbhag: [Github Link](https://github.com/sohanshanbhag1502)
+<br>
 Shrujan V: [Github Link](https://github.com/Shrujan-V)
